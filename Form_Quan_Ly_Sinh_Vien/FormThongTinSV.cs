@@ -6,7 +6,6 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -194,26 +193,28 @@ namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Sinh_Vien
          * NOTE: Validation nên được thực hiện ở CẢẢ CLIENT (Form) và SERVER (BLL)
          * - Client validation: Phản hồi nhanh cho người dùng
          * - Server validation: Bảo mật, ngăn chặn dữ liệu sai từ nguồn khác
+         *
+         * REFACTORED: Không dùng StringBuilder, dùng string concatenation đơn giản
          */
         private string ValidateInput()
         {
-            StringBuilder errors = new StringBuilder();
+            string errors = ""; // Chuỗi chứa các lỗi (thay vì StringBuilder)
 
             // 1. KIỂM TRA CÁC TRƯỜNG BẮT BUỘC
             if (string.IsNullOrWhiteSpace(textBoxMaSV.Text))
-                errors.AppendLine("- Mã sinh viên không được để trống");
+                errors = errors + "- Mã sinh viên không được để trống\n";
 
             if (string.IsNullOrWhiteSpace(textBoxHoSV.Text))
-                errors.AppendLine("- Họ sinh viên không được để trống");
+                errors = errors + "- Họ sinh viên không được để trống\n";
 
             if (string.IsNullOrWhiteSpace(textBoxTenSV.Text))
-                errors.AppendLine("- Tên sinh viên không được để trống");
+                errors = errors + "- Tên sinh viên không được để trống\n";
 
             // 2. KIỂM TRA ĐỊNH DẠNG EMAIL
             if (!string.IsNullOrWhiteSpace(textBoxEmail.Text))
             {
                 if (!IsValidEmail(textBoxEmail.Text.Trim()))
-                    errors.AppendLine("- Email không đúng định dạng");
+                    errors = errors + "- Email không đúng định dạng\n";
             }
 
             // 3. KIỂM TRA CCCD (12 chữ số)
@@ -221,7 +222,7 @@ namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Sinh_Vien
             {
                 string cccd = textBoxCCCD.Text.Trim();
                 if (!IsNumeric(cccd) || cccd.Length != 12)
-                    errors.AppendLine("- CCCD phải là 12 chữ số");
+                    errors = errors + "- CCCD phải là 12 chữ số\n";
             }
 
             // 4. KIỂM TRA SỐ ĐIỆN THOẠI (10 chữ số)
@@ -229,7 +230,7 @@ namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Sinh_Vien
             {
                 string sdt = textBoxSDT.Text.Trim();
                 if (!IsNumeric(sdt) || sdt.Length != 10)
-                    errors.AppendLine("- Số điện thoại phải là 10 chữ số");
+                    errors = errors + "- Số điện thoại phải là 10 chữ số\n";
             }
 
             // 5. KIỂM TRA NGÀY SINH (phải >= 18 tuổi)
@@ -238,34 +239,86 @@ namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Sinh_Vien
             if (ngaySinh > DateTime.Now.AddYears(-tuoi)) tuoi--;
 
             if (tuoi < 18)
-                errors.AppendLine("- Sinh viên phải đủ 18 tuổi");
+                errors = errors + "- Sinh viên phải đủ 18 tuổi\n";
 
             // 6. KIỂM TRA COMBOBOX
             if (string.IsNullOrWhiteSpace(comboBoxLopSV.Text))
-                errors.AppendLine("- Vui lòng chọn lớp");
+                errors = errors + "- Vui lòng chọn lớp\n";
 
             if (string.IsNullOrWhiteSpace(comboBoxTrangThaiSV.Text))
-                errors.AppendLine("- Vui lòng chọn trạng thái");
+                errors = errors + "- Vui lòng chọn trạng thái\n";
 
-            return errors.ToString();
+            return errors;
         }
 
         // ===== HELPER METHODS =====
 
         // Kiểm tra email hợp lệ
-        // Sử dụng: Regular Expression (Regex)
+        // REFACTORED: Không dùng Regex, dùng logic thủ công
+        /*
+         * GIẢI THÍCH CHO SINH VIÊN:
+         *
+         * Email hợp lệ cần có các điều kiện:
+         * 1. Có đúng 1 ký tự '@'
+         * 2. '@' không ở đầu hoặc cuối
+         * 3. Có ít nhất 1 dấu '.' sau '@'
+         * 4. Dấu '.' cuối không ở vị trí cuối cùng
+         * 5. Không có khoảng trắng
+         *
+         * VD hợp lệ: abc@gmail.com, student@university.edu.vn
+         * VD không hợp lệ: abc, @gmail.com, abc@, abc @gmail.com
+         */
         private bool IsValidEmail(string email)
         {
-            try
-            {
-                // Pattern cơ bản cho email: text@domain.com
-                string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-                return Regex.IsMatch(email, pattern);
-            }
-            catch
-            {
+            if (string.IsNullOrEmpty(email))
                 return false;
+
+            // BƯỚC 1: Kiểm tra có khoảng trắng không (email không được chứa khoảng trắng)
+            for (int i = 0; i < email.Length; i++)
+            {
+                if (email[i] == ' ')
+                    return false;
             }
+
+            // BƯỚC 2: Tìm vị trí của ký tự '@'
+            int viTriAt = -1; // Vị trí của '@'
+            int soLuongAt = 0; // Số lượng '@'
+
+            for (int i = 0; i < email.Length; i++)
+            {
+                if (email[i] == '@')
+                {
+                    viTriAt = i;
+                    soLuongAt++;
+                }
+            }
+
+            // Kiểm tra: phải có đúng 1 '@' và không ở đầu/cuối
+            if (soLuongAt != 1 || viTriAt == 0 || viTriAt == email.Length - 1)
+                return false;
+
+            // BƯỚC 3: Kiểm tra phần sau '@' phải có ít nhất 1 dấu '.'
+            bool coDauChamSauAt = false;
+            int viTriDauChamCuoi = -1;
+
+            for (int i = viTriAt + 1; i < email.Length; i++)
+            {
+                if (email[i] == '.')
+                {
+                    coDauChamSauAt = true;
+                    viTriDauChamCuoi = i;
+                }
+            }
+
+            // Kiểm tra: phải có dấu '.' sau '@' và dấu '.' không ở cuối
+            if (!coDauChamSauAt || viTriDauChamCuoi == email.Length - 1)
+                return false;
+
+            // BƯỚC 4: Kiểm tra dấu '.' không đứng liền sau '@'
+            if (email[viTriAt + 1] == '.')
+                return false;
+
+            return true;
         }
 
         // Kiểm tra chuỗi toàn số
