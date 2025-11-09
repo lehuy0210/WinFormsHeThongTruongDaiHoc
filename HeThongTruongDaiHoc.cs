@@ -45,12 +45,33 @@ using System.Windows.Forms;
 
 namespace He_Thong_Truong_Dai_Hoc
 {
-    // ==================== MAIN FORM - HỆ THỐNG TRƯỜNG ĐẠI HỌC ====================
+    // ==================== MAIN FORM - HỆ THỐNG TRƯỜNG ĐẠI HỌC (OPTIMIZED) ====================
     // REFACTORED: Áp dụng kiến trúc N-Layer (3-Tier Architecture)
+    // CẢI TIẾN:
+    // 1. Thêm constants cho column names
+    // 2. Thêm error handling
+    // 3. Implement button state management
+    // 4. Cải thiện UX
     public partial class HeThongTruongDaiHoc : Form
     {
         // =========================================================
-        // I. LỚP LOGIC NGHIỆP VỤ (BLL) & LỚP DỮ LIỆU (DTO)
+        // I. CONSTANTS - COLUMN NAMES
+        // =========================================================
+        // Định nghĩa tên cột như constants để tránh hardcode và dễ bảo trì
+        private const string COL_MA_SV = "colMaSV";
+        private const string COL_HO_SV = "colHoSV";
+        private const string COL_TEN_LOT_SV = "colTenLotSV";
+        private const string COL_TEN_SV = "colTenSV";
+        private const string COL_NGAY_SINH_SV = "colNgaySinhSV";
+        private const string COL_GIOI_TINH_SV = "colGioiTinhSV";
+        private const string COL_CCCD_SV = "colCCCDSV";
+        private const string COL_DIA_CHI_SV = "colDiaChiSV";
+        private const string COL_EMAIL_SV = "colEmailSV";
+        private const string COL_LOP_SV = "colLopSV";
+        private const string COL_TRANG_THAI_SV = "colTrangThaiSV";
+
+        // =========================================================
+        // II. LỚP LOGIC NGHIỆP VỤ (BLL) & LỚP DỮ LIỆU (DTO)
         // =========================================================
 
         // DTO (Data Transfer Object) - Lớp chứa dữ liệu
@@ -65,7 +86,7 @@ namespace He_Thong_Truong_Dai_Hoc
         private ChucNangThongKeSV chucNangThongKe;
 
         // =========================================================
-        // II. KHỞI TẠO FORM (CONSTRUCTOR)
+        // III. KHỞI TẠO FORM (CONSTRUCTOR)
         // =========================================================
         public HeThongTruongDaiHoc()
         {
@@ -83,6 +104,21 @@ namespace He_Thong_Truong_Dai_Hoc
             chucNangThongKe = new ChucNangThongKeSV();
 
             // BƯỚC 3: Thiết lập giao diện (UI)
+            ThietLapGiaoDien();
+
+            // BƯỚC 4: Cài đặt cột cho DataGridView
+            ThietLapDataGridView();
+
+            // BƯỚC 5: Cập nhật trạng thái buttons
+            CapNhatTrangThaiButtons();
+
+            // BƯỚC 6: Đăng ký event handler cho DataGridView
+            dataGridViewThongTinSinhVien.SelectionChanged += DataGridViewThongTinSinhVien_SelectionChanged;
+        }
+
+        // ===== THIẾT LẬP GIAO DIỆN =====
+        private void ThietLapGiaoDien()
+        {
             tabControlHeThong.Dock = DockStyle.Fill;
             buttonThemThongTinSV.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonTimKiemSV.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -90,337 +126,495 @@ namespace He_Thong_Truong_Dai_Hoc
             buttonSuaThongTinSV.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonLamMoiThongTinSV.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             dataGridViewThongTinSinhVien.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+        }
 
-            // BƯỚC 4: Cài đặt cột cho DataGridView
-            dataGridViewThongTinSinhVien.Columns.Add("colMaSV", "Mã Sinh Viên");
-            dataGridViewThongTinSinhVien.Columns.Add("colHoSV", "Họ");
-            dataGridViewThongTinSinhVien.Columns.Add("colTenLotSV", "Tên Lót");
-            dataGridViewThongTinSinhVien.Columns.Add("colTenSV", "Tên");
-            dataGridViewThongTinSinhVien.Columns.Add("colNgaySinhSV", "Ngày Sinh");
-            dataGridViewThongTinSinhVien.Columns.Add("colGioiTinhSV", "Giới Tính");
-            dataGridViewThongTinSinhVien.Columns.Add("colCCCDSV", "Căn Cước Công Dân");
-            dataGridViewThongTinSinhVien.Columns.Add("colDiaChiSV", "Địa Chỉ");
-            dataGridViewThongTinSinhVien.Columns.Add("colEmailSV", "Email");
-            dataGridViewThongTinSinhVien.Columns.Add("colLopSV", "Lớp");
-            dataGridViewThongTinSinhVien.Columns.Add("colTrangThaiSV", "Trạng Thái");
+        // ===== THIẾT LẬP DATAGRIDVIEW =====
+        private void ThietLapDataGridView()
+        {
+            // Sử dụng constants thay vì hardcode
+            dataGridViewThongTinSinhVien.Columns.Add(COL_MA_SV, "Mã Sinh Viên");
+            dataGridViewThongTinSinhVien.Columns.Add(COL_HO_SV, "Họ");
+            dataGridViewThongTinSinhVien.Columns.Add(COL_TEN_LOT_SV, "Tên Lót");
+            dataGridViewThongTinSinhVien.Columns.Add(COL_TEN_SV, "Tên");
+            dataGridViewThongTinSinhVien.Columns.Add(COL_NGAY_SINH_SV, "Ngày Sinh");
+            dataGridViewThongTinSinhVien.Columns.Add(COL_GIOI_TINH_SV, "Giới Tính");
+            dataGridViewThongTinSinhVien.Columns.Add(COL_CCCD_SV, "Căn Cước Công Dân");
+            dataGridViewThongTinSinhVien.Columns.Add(COL_DIA_CHI_SV, "Địa Chỉ");
+            dataGridViewThongTinSinhVien.Columns.Add(COL_EMAIL_SV, "Email");
+            dataGridViewThongTinSinhVien.Columns.Add(COL_LOP_SV, "Lớp");
+            dataGridViewThongTinSinhVien.Columns.Add(COL_TRANG_THAI_SV, "Trạng Thái");
 
             // Tự động co dãn các cột
             dataGridViewThongTinSinhVien.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
             // Tối ưu riêng cho cột Ngày Sinh
-            dataGridViewThongTinSinhVien.Columns["colNgaySinhSV"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewThongTinSinhVien.Columns["colNgaySinhSV"].DefaultCellStyle.Format = "d";
+            dataGridViewThongTinSinhVien.Columns[COL_NGAY_SINH_SV].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewThongTinSinhVien.Columns[COL_NGAY_SINH_SV].DefaultCellStyle.Format = "d";
+
+            // Cấu hình thêm
+            dataGridViewThongTinSinhVien.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridViewThongTinSinhVien.MultiSelect = false;
+            dataGridViewThongTinSinhVien.ReadOnly = true;
+            dataGridViewThongTinSinhVien.AllowUserToAddRows = false;
+        }
+
+        // ===== CẬP NHẬT TRẠNG THÁI BUTTONS =====
+        /*
+         * Enable/Disable buttons dựa trên trạng thái hiện tại
+         * - Xóa/Sửa: Chỉ enable khi có sinh viên được chọn
+         * - Tìm kiếm: Chỉ enable khi có dữ liệu
+         */
+        private void CapNhatTrangThaiButtons()
+        {
+            bool coDuLieu = quanLy.LaySoLuongSinhVien() > 0;
+            bool coChon = dataGridViewThongTinSinhVien.SelectedRows.Count > 0;
+
+            // Nút Xóa và Sửa chỉ enable khi có sinh viên được chọn
+            buttonXoaThongTinSV.Enabled = coChon && coDuLieu;
+            buttonSuaThongTinSV.Enabled = coChon && coDuLieu;
+
+            // Nút Tìm kiếm và Làm mới chỉ enable khi có dữ liệu
+            buttonTimKiemSV.Enabled = coDuLieu;
+            buttonLamMoiThongTinSV.Enabled = coDuLieu;
+
+            // Nút Thêm luôn enable
+            buttonThemThongTinSV.Enabled = true;
+        }
+
+        // ===== EVENT: SELECTION CHANGED =====
+        private void DataGridViewThongTinSinhVien_SelectionChanged(object sender, EventArgs e)
+        {
+            // Cập nhật trạng thái buttons mỗi khi selection thay đổi
+            CapNhatTrangThaiButtons();
         }
 
         // =========================================================
-        // III. SỰ KIỆN GIAO DIỆN (EVENT HANDLERS)
+        // IV. SỰ KIỆN GIAO DIỆN (EVENT HANDLERS) - WITH ERROR HANDLING
         // =========================================================
 
-        // === SỰ KIỆN THÊM SINH VIÊN (REFACTORED) ===
+        // === SỰ KIỆN THÊM SINH VIÊN (OPTIMIZED) ===
         private void buttonThemThongTinSV_Click(object sender, EventArgs e)
         {
-            using (FormThongTinSV MenuThemThongTinSV = new FormThongTinSV(null))
+            try
             {
-                DialogResult ketQuaMenuThem = MenuThemThongTinSV.ShowDialog();
-
-                if (ketQuaMenuThem == DialogResult.OK)
+                using (FormThongTinSV MenuThemThongTinSV = new FormThongTinSV(null))
                 {
-                    ThongTinSinhVien svMoi = MenuThemThongTinSV.SinhVienMoi;
+                    DialogResult ketQuaMenuThem = MenuThemThongTinSV.ShowDialog();
 
-                    if (svMoi != null)
+                    if (ketQuaMenuThem == DialogResult.OK)
                     {
-                        // REFACTORED: Gọi BLL
-                        bool ketQua = chucNangThem.ThemSinhVien(
-                            quanLy.LayDanhSachSinhVien(), // Lấy danh sách từ DTO
-                            svMoi  // Sinh viên mới
-                        );
+                        ThongTinSinhVien svMoi = MenuThemThongTinSV.SinhVienMoi;
 
-                        if (ketQua)
+                        if (svMoi != null)
                         {
-                            // THAY ĐỔI: Gọi hàm HienThiDanhSach để đồng bộ
-                            HienThiDanhSach(quanLy.LayDanhSachSinhVien());
+                            // REFACTORED: Gọi BLL
+                            bool ketQua = chucNangThem.ThemSinhVien(
+                                quanLy.LayDanhSachSinhVien(), // Lấy danh sách từ DTO
+                                svMoi  // Sinh viên mới
+                            );
 
-                            MessageBox.Show(
-                                "Thêm sinh viên thành công!",
-                                "Thông báo",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information
-                            );
-                        }
-                        else
-                        {
-                            // Thêm thất bại (mã sinh viên trùng hoặc dữ liệu không hợp lệ)
-                            MessageBox.Show(
-                                "Thêm sinh viên thất bại!\n" +
-                                "Nguyên nhân có thể:\n" +
-                                "- Mã sinh viên đã tồn tại\n" +
-                                "- Dữ liệu không hợp lệ",
-                                "Lỗi",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error
-                            );
+                            if (ketQua)
+                            {
+                                // THAY ĐỔI: Gọi hàm HienThiDanhSach để đồng bộ
+                                HienThiDanhSach(quanLy.LayDanhSachSinhVien());
+
+                                // Cập nhật trạng thái buttons
+                                CapNhatTrangThaiButtons();
+
+                                MessageBox.Show(
+                                    "Thêm sinh viên thành công!",
+                                    "Thông báo",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information
+                                );
+                            }
+                            else
+                            {
+                                // Thêm thất bại (mã sinh viên trùng hoặc dữ liệu không hợp lệ)
+                                MessageBox.Show(
+                                    "Thêm sinh viên thất bại!\n" +
+                                    "Nguyên nhân có thể:\n" +
+                                    "- Mã sinh viên đã tồn tại\n" +
+                                    "- Dữ liệu không hợp lệ",
+                                    "Lỗi",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error
+                                );
+                            }
                         }
                     }
                 }
             }
-        }
-
-        // === SỰ KIỆN SỬA SINH VIÊN (REFACTORED) ===
-        private void buttonSuaThongTinSV_Click(object sender, EventArgs e)
-        {
-            // Kiểm tra có dòng nào được chọn không
-            if (dataGridViewThongTinSinhVien.SelectedRows.Count == 0)
+            catch (Exception ex)
             {
+                // ERROR HANDLING: Bắt tất cả exceptions
                 MessageBox.Show(
-                    "Vui lòng chọn sinh viên cần sửa!",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-                return;
-            }
-
-            // Lấy mã sinh viên từ dòng được chọn
-            DataGridViewRow dongDuocChon = dataGridViewThongTinSinhVien.SelectedRows[0];
-            string maSV = dongDuocChon.Cells["colMaSV"].Value.ToString();
-
-            // REFACTORED: Dùng BLL để tìm sinh viên
-            ThongTinSinhVien svCanSua = chucNangTimKiem.TimTheoMaSV(
-                quanLy.LayDanhSachSinhVien(), // Danh sách từ DTO
-                maSV  // Mã sinh viên cần tìm
-            );
-
-            if (svCanSua == null)
-            {
-                MessageBox.Show(
-                    "Không tìm thấy sinh viên trong hệ thống!",
-                    "Lỗi",
+                    $"Đã xảy ra lỗi khi thêm sinh viên!\n\nChi tiết lỗi:\n{ex.Message}",
+                    "Lỗi hệ thống",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                 );
-                return;
-            }
-
-            // Mở Form Sửa và "truyền" sinh viên cần sửa vào
-            using (FormThongTinSV formSua = new FormThongTinSV(svCanSua))
-            {
-                DialogResult ketQua = formSua.ShowDialog();
-
-                if (ketQua == DialogResult.OK)
-                {
-                    ThongTinSinhVien thongTinMoi = formSua.SinhVienMoi;
-
-                    if (thongTinMoi != null)
-                    {
-                        // REFACTORED: Dùng BLL để sửa thông tin
-                        bool capNhatThanhCong = chucNangSua.SuaThongTinSinhVien(
-                            quanLy.LayDanhSachSinhVien(), // Danh sách từ DTO
-                            maSV,   // Mã sinh viên cần sửa
-                            thongTinMoi // Thông tin mới
-                        );
-
-                        if (capNhatThanhCong)
-                        {
-                            // Làm mới DataGridView
-                            HienThiDanhSach(quanLy.LayDanhSachSinhVien());
-
-                            MessageBox.Show(
-                                "Sửa thông tin sinh viên thành công!",
-                                "Thông báo",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information
-                            );
-                        }
-                        else
-                        {
-                            MessageBox.Show(
-                                "Sửa thông tin thất bại!",
-                                "Lỗi",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error
-                            );
-                        }
-                    }
-                }
             }
         }
 
-        // === SỰ KIỆN XÓA SINH VIÊN (REFACTORED) ===
-        private void buttonXoaThongTinSV_Click(object sender, EventArgs e)
+        // === SỰ KIỆN SỬA SINH VIÊN (OPTIMIZED) ===
+        private void buttonSuaThongTinSV_Click(object sender, EventArgs e)
         {
-            // Kiểm tra có dòng nào được chọn không
-            if (dataGridViewThongTinSinhVien.SelectedRows.Count == 0)
+            try
             {
-                MessageBox.Show(
-                    "Vui lòng chọn sinh viên cần xóa!",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-                return;
-            }
-
-            // Lấy mã sinh viên từ dòng được chọn
-            DataGridViewRow dongDuocChon = dataGridViewThongTinSinhVien.SelectedRows[0];
-            string maSV = dongDuocChon.Cells["colMaSV"].Value.ToString();
-
-            // Xác nhận trước khi xóa
-            DialogResult xacNhan = MessageBox.Show(
-                $"Bạn có chắc chắn muốn xóa sinh viên có mã: {maSV}?",
-                "Xác nhận xóa",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
-            );
-
-            if (xacNhan == DialogResult.Yes)
-            {
-                // REFACTORED: Gọi BLL thay vì DTO
-                bool ketQua = chucNangXoa.XoaSinhVien(
-                    quanLy.LayDanhSachSinhVien(), // Danh sách từ DTO
-                    maSV  // Mã sinh viên cần xóa
-                );
-
-                if (ketQua)
+                // Kiểm tra có dòng nào được chọn không
+                if (dataGridViewThongTinSinhVien.SelectedRows.Count == 0)
                 {
-                    // THAY ĐỔI: Gọi hàm HienThiDanhSach để đồng bộ
-                    // (Xóa code: dataGridViewThongTinSinhVien.Rows.Remove(dongDuocChon);)
-                    HienThiDanhSach(quanLy.LayDanhSachSinhVien());
-
                     MessageBox.Show(
-                        "Xóa sinh viên thành công!",
+                        "Vui lòng chọn sinh viên cần sửa!",
                         "Thông báo",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Information
+                        MessageBoxIcon.Warning
                     );
+                    return;
                 }
-                else
+
+                // Lấy mã sinh viên từ dòng được chọn - SỬ DỤNG CONSTANT
+                DataGridViewRow dongDuocChon = dataGridViewThongTinSinhVien.SelectedRows[0];
+                string maSV = dongDuocChon.Cells[COL_MA_SV].Value?.ToString() ?? "";
+
+                // REFACTORED: Dùng BLL để tìm sinh viên
+                ThongTinSinhVien svCanSua = chucNangTimKiem.TimTheoMaSV(
+                    quanLy.LayDanhSachSinhVien(), // Danh sách từ DTO
+                    maSV  // Mã sinh viên cần tìm
+                );
+
+                if (svCanSua == null)
                 {
                     MessageBox.Show(
-                        "Xóa sinh viên thất bại!",
+                        "Không tìm thấy sinh viên trong hệ thống!",
                         "Lỗi",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error
                     );
+                    return;
                 }
+
+                // Mở Form Sửa và "truyền" sinh viên cần sửa vào
+                using (FormThongTinSV formSua = new FormThongTinSV(svCanSua))
+                {
+                    DialogResult ketQua = formSua.ShowDialog();
+
+                    if (ketQua == DialogResult.OK)
+                    {
+                        ThongTinSinhVien thongTinMoi = formSua.SinhVienMoi;
+
+                        if (thongTinMoi != null)
+                        {
+                            // REFACTORED: Dùng BLL để sửa thông tin
+                            bool capNhatThanhCong = chucNangSua.SuaThongTinSinhVien(
+                                quanLy.LayDanhSachSinhVien(), // Danh sách từ DTO
+                                maSV,   // Mã sinh viên cần sửa
+                                thongTinMoi // Thông tin mới
+                            );
+
+                            if (capNhatThanhCong)
+                            {
+                                // Làm mới DataGridView
+                                HienThiDanhSach(quanLy.LayDanhSachSinhVien());
+
+                                MessageBox.Show(
+                                    "Sửa thông tin sinh viên thành công!",
+                                    "Thông báo",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information
+                                );
+                            }
+                            else
+                            {
+                                MessageBox.Show(
+                                    "Sửa thông tin thất bại!",
+                                    "Lỗi",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // ERROR HANDLING: Bắt tất cả exceptions
+                MessageBox.Show(
+                    $"Đã xảy ra lỗi khi sửa thông tin sinh viên!\n\nChi tiết lỗi:\n{ex.Message}",
+                    "Lỗi hệ thống",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
 
-        // === SỰ KIỆN TÌM KIẾM (REFACTORED) ===
-        private void buttonTimKiemSV_Click(object sender, EventArgs e)
+        // === SỰ KIỆN XÓA SINH VIÊN (OPTIMIZED) ===
+        private void buttonXoaThongTinSV_Click(object sender, EventArgs e)
         {
-            using (FormTimKiemThongTinSV MenuTimKiemThongTinSV = new FormTimKiemThongTinSV())
+            try
             {
-                DialogResult ketQuaMenuTimKiem = MenuTimKiemThongTinSV.ShowDialog();
-
-                if (ketQuaMenuTimKiem == DialogResult.OK)
+                // Kiểm tra có dòng nào được chọn không
+                if (dataGridViewThongTinSinhVien.SelectedRows.Count == 0)
                 {
-                    ThongTinSinhVien svTieuChi = MenuTimKiemThongTinSV.TieuChiTimKiem;
+                    MessageBox.Show(
+                        "Vui lòng chọn sinh viên cần xóa!",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    return;
+                }
 
-                    if (svTieuChi == null)
+                // Lấy mã sinh viên từ dòng được chọn - SỬ DỤNG CONSTANT
+                DataGridViewRow dongDuocChon = dataGridViewThongTinSinhVien.SelectedRows[0];
+                string maSV = dongDuocChon.Cells[COL_MA_SV].Value?.ToString() ?? "";
+
+                // Xác nhận trước khi xóa
+                DialogResult xacNhan = MessageBox.Show(
+                    $"Bạn có chắc chắn muốn xóa sinh viên có mã: {maSV}?",
+                    "Xác nhận xóa",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (xacNhan == DialogResult.Yes)
+                {
+                    // REFACTORED: Gọi BLL thay vì DTO
+                    bool ketQua = chucNangXoa.XoaSinhVien(
+                        quanLy.LayDanhSachSinhVien(), // Danh sách từ DTO
+                        maSV  // Mã sinh viên cần xóa
+                    );
+
+                    if (ketQua)
                     {
+                        // THAY ĐỔI: Gọi hàm HienThiDanhSach để đồng bộ
+                        HienThiDanhSach(quanLy.LayDanhSachSinhVien());
+
+                        // Cập nhật trạng thái buttons
+                        CapNhatTrangThaiButtons();
+
                         MessageBox.Show(
-                            "Vui lòng nhập ít nhất một tiêu chí tìm kiếm!",
+                            "Xóa sinh viên thành công!",
                             "Thông báo",
                             MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning
+                            MessageBoxIcon.Information
                         );
-                        return;
                     }
-
-                    dataGridViewThongTinSinhVien.SuspendLayout();
-                    try
+                    else
                     {
-                        // REFACTORED: Gọi BLL thay vì DTO
-                        List<ThongTinSinhVien> ketQuaTimKiem = chucNangTimKiem.TimKiemSinhVien(
-                            quanLy.LayDanhSachSinhVien(), // Danh sách từ DTO
-                            svTieuChi  // Tiêu chí tìm kiếm
+                        MessageBox.Show(
+                            "Xóa sinh viên thất bại!",
+                            "Lỗi",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
                         );
-
-                        // Kiểm tra kết quả
-                        if (ketQuaTimKiem.Count == 0)
-                        {
-                            MessageBox.Show(
-                                "Không tìm thấy sinh viên nào phù hợp với tiêu chí tìm kiếm!",
-                                "Kết quả tìm kiếm",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information
-                            );
-                        }
-                        else
-                        {
-                            // Hiển thị kết quả (đã lọc) lên DataGridView
-                            HienThiDanhSach(ketQuaTimKiem);
-
-                            MessageBox.Show(
-                                $"Tìm thấy {ketQuaTimKiem.Count} sinh viên!",
-                                "Kết quả tìm kiếm",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information
-                            );
-                        }
-                    }
-                    finally
-                    {
-                        dataGridViewThongTinSinhVien.ResumeLayout();
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                // ERROR HANDLING: Bắt tất cả exceptions
+                MessageBox.Show(
+                    $"Đã xảy ra lỗi khi xóa sinh viên!\n\nChi tiết lỗi:\n{ex.Message}",
+                    "Lỗi hệ thống",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
 
-        // === SỰ KIỆN LÀM MỚI (YOUR ORIGINAL CODE) ===
+        // === SỰ KIỆN TÌM KIẾM (OPTIMIZED) ===
+        private void buttonTimKiemSV_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (FormTimKiemThongTinSV MenuTimKiemThongTinSV = new FormTimKiemThongTinSV())
+                {
+                    DialogResult ketQuaMenuTimKiem = MenuTimKiemThongTinSV.ShowDialog();
+
+                    if (ketQuaMenuTimKiem == DialogResult.OK)
+                    {
+                        ThongTinSinhVien svTieuChi = MenuTimKiemThongTinSV.TieuChiTimKiem;
+
+                        if (svTieuChi == null)
+                        {
+                            MessageBox.Show(
+                                "Vui lòng nhập ít nhất một tiêu chí tìm kiếm!",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning
+                            );
+                            return;
+                        }
+
+                        dataGridViewThongTinSinhVien.SuspendLayout();
+                        try
+                        {
+                            // REFACTORED: Gọi BLL thay vì DTO
+                            List<ThongTinSinhVien> ketQuaTimKiem = chucNangTimKiem.TimKiemSinhVien(
+                                quanLy.LayDanhSachSinhVien(), // Danh sách từ DTO
+                                svTieuChi  // Tiêu chí tìm kiếm
+                            );
+
+                            // Kiểm tra kết quả
+                            if (ketQuaTimKiem.Count == 0)
+                            {
+                                MessageBox.Show(
+                                    "Không tìm thấy sinh viên nào phù hợp với tiêu chí tìm kiếm!",
+                                    "Kết quả tìm kiếm",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information
+                                );
+                            }
+                            else
+                            {
+                                // Hiển thị kết quả (đã lọc) lên DataGridView
+                                HienThiDanhSach(ketQuaTimKiem);
+
+                                MessageBox.Show(
+                                    $"Tìm thấy {ketQuaTimKiem.Count} sinh viên!",
+                                    "Kết quả tìm kiếm",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information
+                                );
+                            }
+                        }
+                        finally
+                        {
+                            dataGridViewThongTinSinhVien.ResumeLayout();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // ERROR HANDLING: Bắt tất cả exceptions
+                MessageBox.Show(
+                    $"Đã xảy ra lỗi khi tìm kiếm sinh viên!\n\nChi tiết lỗi:\n{ex.Message}",
+                    "Lỗi hệ thống",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
+        // === SỰ KIỆN LÀM MỚI (OPTIMIZED) ===
         private void buttonLamMoiThongTinSV_Click(object sender, EventArgs e)
         {
-            // Hiển thị lại toàn bộ danh sách
-            List<ThongTinSinhVien> danhSachDayDu = quanLy.LayDanhSachSinhVien();
-            HienThiDanhSach(danhSachDayDu);
+            try
+            {
+                // Hiển thị lại toàn bộ danh sách
+                List<ThongTinSinhVien> danhSachDayDu = quanLy.LayDanhSachSinhVien();
+                HienThiDanhSach(danhSachDayDu);
 
-            MessageBox.Show(
-                "Đã làm mới danh sách sinh viên!",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+                MessageBox.Show(
+                    "Đã làm mới danh sách sinh viên!",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+            }
+            catch (Exception ex)
+            {
+                // ERROR HANDLING: Bắt tất cả exceptions
+                MessageBox.Show(
+                    $"Đã xảy ra lỗi khi làm mới danh sách!\n\nChi tiết lỗi:\n{ex.Message}",
+                    "Lỗi hệ thống",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
 
         // =========================================================
-        // IV. PHƯƠNG THỨC HỖ TRỢ (HELPER METHODS)
+        // V. PHƯƠNG THỨC HỖ TRỢ (HELPER METHODS)
         // =========================================================
 
-        // === PHƯƠNG THỨC HIỂN THỊ DANH SÁCH (ĐÃ GỘP) ===
+        // === PHƯƠNG THỨC HIỂN THỊ DANH SÁCH (OPTIMIZED) ===
         /*
          * REFACTORED: Đây là phương thức TỔNG
          * Xóa tất cả dòng hiện tại
          * Duyệt qua danh sách (List) và thêm từng sinh viên
+         * SỬ DỤNG CONSTANTS cho column order
          */
         private void HienThiDanhSach(List<ThongTinSinhVien> danhSach)
         {
             // Tắt vẽ để tăng tốc độ
             dataGridViewThongTinSinhVien.SuspendLayout();
 
-            // Xóa tất cả dòng hiện tại
-            dataGridViewThongTinSinhVien.Rows.Clear();
-
-            // Duyệt qua danh sách và hiển thị từng sinh viên
-            foreach (ThongTinSinhVien sv in danhSach)
+            try
             {
-                // Logic của hàm LoadDataGridView(sv) cũ được gộp vào đây
-                dataGridViewThongTinSinhVien.Rows.Add(
-                    sv.MaSV,
-                    sv.HoSV,
-                    sv.TenLotSV,
-                    sv.TenSV,
-                    sv.NgaySinhSV,
-                    sv.GioiTinhSV,
-                    sv.CCCDSV,
-                    sv.DiaChiSV,
-                    sv.EmailSV,
-                    sv.LopSV,
-                    sv.TrangThaiSV
-                );
-            }
+                // Xóa tất cả dòng hiện tại
+                dataGridViewThongTinSinhVien.Rows.Clear();
 
-            // Bật vẽ trở lại
-            dataGridViewThongTinSinhVien.ResumeLayout();
+                // Duyệt qua danh sách và hiển thị từng sinh viên
+                foreach (ThongTinSinhVien sv in danhSach)
+                {
+                    // Thêm dòng mới vào DataGridView
+                    // Thứ tự cột phải khớp với thứ tự trong ThietLapDataGridView()
+                    dataGridViewThongTinSinhVien.Rows.Add(
+                        sv.MaSV,
+                        sv.HoSV,
+                        sv.TenLotSV,
+                        sv.TenSV,
+                        sv.NgaySinhSV,
+                        sv.GioiTinhSV,
+                        sv.CCCDSV,
+                        sv.DiaChiSV,
+                        sv.EmailSV,
+                        sv.LopSV,
+                        sv.TrangThaiSV
+                    );
+                }
+            }
+            finally
+            {
+                // Bật vẽ trở lại (luôn chạy dù có exception hay không)
+                dataGridViewThongTinSinhVien.ResumeLayout();
+            }
         }
+
+        /*
+         * ==================== TÓM TẮT CẢI TIẾN MAIN FORM ====================
+         *
+         * 1. CONSTANTS:
+         *    - Định nghĩa column names như constants
+         *    - Tránh hardcode, dễ bảo trì
+         *    - Tránh lỗi typo khi reference columns
+         *
+         * 2. ERROR HANDLING:
+         *    - Bọc tất cả event handlers trong try-catch
+         *    - Hiển thị thông báo lỗi chi tiết cho developer
+         *    - Ngăn chặn crash application
+         *
+         * 3. BUTTON STATE MANAGEMENT:
+         *    - Enable/Disable buttons dựa trên trạng thái
+         *    - Xóa/Sửa chỉ enable khi có selection
+         *    - Tìm kiếm/Làm mới chỉ enable khi có dữ liệu
+         *    - Cải thiện UX
+         *
+         * 4. CODE ORGANIZATION:
+         *    - Tách setup logic thành methods riêng:
+         *      + ThietLapGiaoDien()
+         *      + ThietLapDataGridView()
+         *      + CapNhatTrangThaiButtons()
+         *    - Dễ đọc, dễ maintain
+         *
+         * 5. NULL SAFETY:
+         *    - Sử dụng null-coalescing operator (??)
+         *    - Tránh NullReferenceException
+         *
+         * 6. DATAGRIDVIEW CONFIGURATION:
+         *    - SelectionMode = FullRowSelect
+         *    - MultiSelect = false
+         *    - ReadOnly = true
+         *    - AllowUserToAddRows = false
+         *    - Cải thiện UX và tránh lỗi
+         *
+         * ==================== END TÓM TẮT ====================
+         */
 
     } // Kết thúc Class HeThongTruongDaiHoc
 } // Kết thúc Namespace
