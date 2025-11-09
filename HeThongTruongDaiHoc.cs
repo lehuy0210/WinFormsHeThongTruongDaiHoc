@@ -161,26 +161,20 @@ namespace He_Thong_Truong_Dai_Hoc
 
         // ===== CẬP NHẬT TRẠNG THÁI BUTTONS =====
         /*
-         * Enable/Disable buttons dựa trên trạng thái hiện tại
-         * - Xóa/Sửa: Chỉ enable khi có sinh viên được chọn
-         * - Tìm kiếm/Làm mới/Thống kê: Chỉ enable khi có dữ liệu
+         * OPTIMIZED: Tất cả buttons luôn enabled
+         * Thay vì disable, sẽ hiện thông báo khi click vào button mà chưa có dữ liệu
+         * Cải thiện UX: User biết rõ lý do tại sao không thể thực hiện thao tác
          */
         private void CapNhatTrangThaiButtons()
         {
-            bool coDuLieu = quanLy.LaySoLuongSinhVien() > 0;
-            bool coChon = dataGridViewThongTinSinhVien.SelectedRows.Count > 0;
-
-            // Nút Xóa và Sửa chỉ enable khi có sinh viên được chọn
-            buttonXoaThongTinSV.Enabled = coChon && coDuLieu;
-            buttonSuaThongTinSV.Enabled = coChon && coDuLieu;
-
-            // Nút Tìm kiếm, Làm mới và Thống kê chỉ enable khi có dữ liệu
-            buttonTimKiemSV.Enabled = coDuLieu;
-            buttonLamMoiThongTinSV.Enabled = coDuLieu;
-            buttonThongKeSV.Enabled = coDuLieu;
-
-            // Nút Thêm luôn enable
+            // TẤT CẢ BUTTONS LUÔN ENABLED
+            // Khi click sẽ có thông báo hướng dẫn nếu chưa đủ điều kiện
             buttonThemThongTinSV.Enabled = true;
+            buttonTimKiemSV.Enabled = true;
+            buttonSuaThongTinSV.Enabled = true;
+            buttonXoaThongTinSV.Enabled = true;
+            buttonLamMoiThongTinSV.Enabled = true;
+            buttonThongKeSV.Enabled = true;
         }
 
         // ===== EVENT: SELECTION CHANGED =====
@@ -264,7 +258,20 @@ namespace He_Thong_Truong_Dai_Hoc
         {
             try
             {
-                // Kiểm tra có dòng nào được chọn không
+                // BƯỚC 1: Kiểm tra có dữ liệu không
+                if (quanLy.LaySoLuongSinhVien() == 0)
+                {
+                    MessageBox.Show(
+                        "⚠️ Chưa có dữ liệu sinh viên!\n\n" +
+                        "Vui lòng thêm thông tin sinh viên trước khi sử dụng chức năng sửa.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                    return;
+                }
+
+                // BƯỚC 2: Kiểm tra có dòng nào được chọn không
                 if (dataGridViewThongTinSinhVien.SelectedRows.Count == 0)
                 {
                     MessageBox.Show(
@@ -357,7 +364,20 @@ namespace He_Thong_Truong_Dai_Hoc
         {
             try
             {
-                // Kiểm tra có dòng nào được chọn không
+                // BƯỚC 1: Kiểm tra có dữ liệu không
+                if (quanLy.LaySoLuongSinhVien() == 0)
+                {
+                    MessageBox.Show(
+                        "⚠️ Chưa có dữ liệu sinh viên!\n\n" +
+                        "Vui lòng thêm thông tin sinh viên trước khi sử dụng chức năng xóa.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                    return;
+                }
+
+                // BƯỚC 2: Kiểm tra có dòng nào được chọn không
                 if (dataGridViewThongTinSinhVien.SelectedRows.Count == 0)
                 {
                     MessageBox.Show(
@@ -432,6 +452,19 @@ namespace He_Thong_Truong_Dai_Hoc
         {
             try
             {
+                // Kiểm tra có dữ liệu không
+                if (quanLy.LaySoLuongSinhVien() == 0)
+                {
+                    MessageBox.Show(
+                        "⚠️ Chưa có dữ liệu sinh viên!\n\n" +
+                        "Vui lòng thêm thông tin sinh viên trước khi sử dụng chức năng tìm kiếm.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                    return;
+                }
+
                 using (FormTimKiemThongTinSV MenuTimKiemThongTinSV = new FormTimKiemThongTinSV())
                 {
                     DialogResult ketQuaMenuTimKiem = MenuTimKiemThongTinSV.ShowDialog();
@@ -507,6 +540,19 @@ namespace He_Thong_Truong_Dai_Hoc
         {
             try
             {
+                // Kiểm tra có dữ liệu không
+                if (quanLy.LaySoLuongSinhVien() == 0)
+                {
+                    MessageBox.Show(
+                        "⚠️ Chưa có dữ liệu sinh viên!\n\n" +
+                        "Vui lòng thêm thông tin sinh viên trước khi sử dụng chức năng làm mới.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                    return;
+                }
+
                 // Hiển thị lại toàn bộ danh sách
                 List<ThongTinSinhVien> danhSachDayDu = quanLy.LayDanhSachSinhVien();
                 HienThiDanhSach(danhSachDayDu);
