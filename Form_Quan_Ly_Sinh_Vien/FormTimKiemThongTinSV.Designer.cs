@@ -1,4 +1,4 @@
-﻿namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Sinh_Vien
+namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Sinh_Vien
 {
     partial class FormTimKiemThongTinSV
     {
@@ -33,78 +33,144 @@
             labelTitleTimKiem = new Label();
             comboBoxTimKiemSV = new ComboBox();
             richTextBoxTimKiemSV = new RichTextBox();
+            labelHuongDan = new Label();
+            groupBoxTimKiem = new GroupBox();
+            labelTieuChi = new Label();
+            labelGiaTri = new Label();
+            groupBoxTimKiem.SuspendLayout();
             SuspendLayout();
-            // 
-            // buttonTimKiemOK
-            // 
-            buttonTimKiemOK.Font = new Font("Times New Roman", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 163);
-            buttonTimKiemOK.Location = new Point(16, 335);
-            buttonTimKiemOK.Margin = new Padding(4, 5, 4, 5);
-            buttonTimKiemOK.Name = "buttonTimKiemOK";
-            buttonTimKiemOK.Size = new Size(149, 109);
-            buttonTimKiemOK.TabIndex = 1;
-            buttonTimKiemOK.Text = "OK";
-            buttonTimKiemOK.UseVisualStyleBackColor = true;
-            // 
-            // buttonTimKiemHuyBo
-            // 
-            buttonTimKiemHuyBo.Font = new Font("Times New Roman", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            buttonTimKiemHuyBo.Location = new Point(229, 335);
-            buttonTimKiemHuyBo.Margin = new Padding(4, 5, 4, 5);
-            buttonTimKiemHuyBo.Name = "buttonTimKiemHuyBo";
-            buttonTimKiemHuyBo.Size = new Size(143, 109);
-            buttonTimKiemHuyBo.TabIndex = 2;
-            buttonTimKiemHuyBo.Text = "HỦY BỎ";
-            buttonTimKiemHuyBo.UseVisualStyleBackColor = true;
-            // 
+            //
             // labelTitleTimKiem
-            // 
-            labelTitleTimKiem.AutoSize = true;
-            labelTitleTimKiem.Font = new Font("Times New Roman", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelTitleTimKiem.Location = new Point(115, 14);
-            labelTitleTimKiem.Margin = new Padding(4, 0, 4, 0);
+            //
+            labelTitleTimKiem.Dock = DockStyle.Top;
+            labelTitleTimKiem.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            labelTitleTimKiem.ForeColor = Color.FromArgb(0, 120, 215);
+            labelTitleTimKiem.Location = new Point(0, 0);
             labelTitleTimKiem.Name = "labelTitleTimKiem";
-            labelTitleTimKiem.Size = new Size(155, 34);
-            labelTitleTimKiem.TabIndex = 3;
-            labelTitleTimKiem.Text = "TÌM KIẾM";
-            // 
+            labelTitleTimKiem.Size = new Size(460, 50);
+            labelTitleTimKiem.TabIndex = 0;
+            labelTitleTimKiem.Text = "TÌM KIẾM SINH VIÊN";
+            labelTitleTimKiem.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // groupBoxTimKiem
+            //
+            groupBoxTimKiem.Controls.Add(labelGiaTri);
+            groupBoxTimKiem.Controls.Add(labelTieuChi);
+            groupBoxTimKiem.Controls.Add(richTextBoxTimKiemSV);
+            groupBoxTimKiem.Controls.Add(comboBoxTimKiemSV);
+            groupBoxTimKiem.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            groupBoxTimKiem.ForeColor = Color.FromArgb(0, 120, 215);
+            groupBoxTimKiem.Location = new Point(20, 70);
+            groupBoxTimKiem.Name = "groupBoxTimKiem";
+            groupBoxTimKiem.Padding = new Padding(15);
+            groupBoxTimKiem.Size = new Size(420, 280);
+            groupBoxTimKiem.TabIndex = 1;
+            groupBoxTimKiem.TabStop = false;
+            groupBoxTimKiem.Text = "Thông Tin Tìm Kiếm";
+            //
+            // labelTieuChi
+            //
+            labelTieuChi.AutoSize = true;
+            labelTieuChi.Font = new Font("Segoe UI", 10F);
+            labelTieuChi.ForeColor = SystemColors.ControlText;
+            labelTieuChi.Location = new Point(20, 35);
+            labelTieuChi.Name = "labelTieuChi";
+            labelTieuChi.Size = new Size(134, 23);
+            labelTieuChi.TabIndex = 0;
+            labelTieuChi.Text = "Tiêu chí tìm kiếm:";
+            //
             // comboBoxTimKiemSV
-            // 
-            comboBoxTimKiemSV.Font = new Font("Times New Roman", 12F, FontStyle.Regular, GraphicsUnit.Point, 163);
+            //
+            comboBoxTimKiemSV.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxTimKiemSV.Font = new Font("Segoe UI", 11F);
             comboBoxTimKiemSV.FormattingEnabled = true;
             comboBoxTimKiemSV.Items.AddRange(new object[] { "Mã Sinh Viên", "Họ và Tên", "Mã Số Sinh Viên", "Căn Cước Công Dân", "Số Điện Thoại" });
-            comboBoxTimKiemSV.Location = new Point(16, 66);
-            comboBoxTimKiemSV.Margin = new Padding(4, 5, 4, 5);
+            comboBoxTimKiemSV.Location = new Point(20, 65);
             comboBoxTimKiemSV.Name = "comboBoxTimKiemSV";
-            comboBoxTimKiemSV.Size = new Size(355, 30);
-            comboBoxTimKiemSV.TabIndex = 4;
-            // 
+            comboBoxTimKiemSV.Size = new Size(380, 33);
+            comboBoxTimKiemSV.TabIndex = 0;
+            //
+            // labelGiaTri
+            //
+            labelGiaTri.AutoSize = true;
+            labelGiaTri.Font = new Font("Segoe UI", 10F);
+            labelGiaTri.ForeColor = SystemColors.ControlText;
+            labelGiaTri.Location = new Point(20, 110);
+            labelGiaTri.Name = "labelGiaTri";
+            labelGiaTri.Size = new Size(155, 23);
+            labelGiaTri.TabIndex = 0;
+            labelGiaTri.Text = "Giá trị cần tìm kiếm:";
+            //
             // richTextBoxTimKiemSV
-            // 
-            richTextBoxTimKiemSV.Font = new Font("Microsoft Sans Serif", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 163);
-            richTextBoxTimKiemSV.Location = new Point(16, 137);
-            richTextBoxTimKiemSV.Margin = new Padding(4, 5, 4, 5);
+            //
+            richTextBoxTimKiemSV.BorderStyle = BorderStyle.FixedSingle;
+            richTextBoxTimKiemSV.Font = new Font("Segoe UI", 11F);
+            richTextBoxTimKiemSV.Location = new Point(20, 140);
             richTextBoxTimKiemSV.Name = "richTextBoxTimKiemSV";
-            richTextBoxTimKiemSV.Size = new Size(355, 152);
-            richTextBoxTimKiemSV.TabIndex = 0;
+            richTextBoxTimKiemSV.Size = new Size(380, 120);
+            richTextBoxTimKiemSV.TabIndex = 1;
             richTextBoxTimKiemSV.Text = "";
-            // 
+            //
+            // labelHuongDan
+            //
+            labelHuongDan.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            labelHuongDan.ForeColor = Color.FromArgb(100, 100, 100);
+            labelHuongDan.Location = new Point(20, 360);
+            labelHuongDan.Name = "labelHuongDan";
+            labelHuongDan.Size = new Size(420, 40);
+            labelHuongDan.TabIndex = 2;
+            labelHuongDan.Text = "Lưu ý: Với tìm kiếm theo \"Họ và Tên\", bạn có thể nhập họ tên đầy đủ\nhoặc chỉ một phần của họ tên.";
+            labelHuongDan.TextAlign = ContentAlignment.MiddleCenter;
+            //
+            // buttonTimKiemOK
+            //
+            buttonTimKiemOK.BackColor = Color.FromArgb(0, 120, 215);
+            buttonTimKiemOK.Cursor = Cursors.Hand;
+            buttonTimKiemOK.FlatStyle = FlatStyle.Flat;
+            buttonTimKiemOK.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            buttonTimKiemOK.ForeColor = Color.White;
+            buttonTimKiemOK.Location = new Point(90, 415);
+            buttonTimKiemOK.Name = "buttonTimKiemOK";
+            buttonTimKiemOK.Size = new Size(140, 45);
+            buttonTimKiemOK.TabIndex = 3;
+            buttonTimKiemOK.Text = "🔍 Tìm kiếm";
+            buttonTimKiemOK.UseVisualStyleBackColor = false;
+            //
+            // buttonTimKiemHuyBo
+            //
+            buttonTimKiemHuyBo.BackColor = Color.FromArgb(240, 240, 240);
+            buttonTimKiemHuyBo.Cursor = Cursors.Hand;
+            buttonTimKiemHuyBo.FlatStyle = FlatStyle.Flat;
+            buttonTimKiemHuyBo.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            buttonTimKiemHuyBo.ForeColor = Color.FromArgb(64, 64, 64);
+            buttonTimKiemHuyBo.Location = new Point(240, 415);
+            buttonTimKiemHuyBo.Name = "buttonTimKiemHuyBo";
+            buttonTimKiemHuyBo.Size = new Size(140, 45);
+            buttonTimKiemHuyBo.TabIndex = 4;
+            buttonTimKiemHuyBo.Text = "✕ Hủy bỏ";
+            buttonTimKiemHuyBo.UseVisualStyleBackColor = false;
+            //
             // FormTimKiemThongTinSV
-            // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(388, 486);
-            Controls.Add(comboBoxTimKiemSV);
-            Controls.Add(labelTitleTimKiem);
+            //
+            AutoScaleDimensions = new SizeF(120F, 120F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            BackColor = Color.White;
+            ClientSize = new Size(460, 480);
             Controls.Add(buttonTimKiemHuyBo);
             Controls.Add(buttonTimKiemOK);
-            Controls.Add(richTextBoxTimKiemSV);
-            Margin = new Padding(4, 5, 4, 5);
+            Controls.Add(labelHuongDan);
+            Controls.Add(groupBoxTimKiem);
+            Controls.Add(labelTitleTimKiem);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FormTimKiemThongTinSV";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Tìm Kiếm Thông Tin Sinh Viên";
             FormClosing += FormTimKiemThongTinSV_FormClosing;
+            groupBoxTimKiem.ResumeLayout(false);
+            groupBoxTimKiem.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
 
         }
 
@@ -114,5 +180,9 @@
         private System.Windows.Forms.Label labelTitleTimKiem;
         private System.Windows.Forms.ComboBox comboBoxTimKiemSV;
         private System.Windows.Forms.RichTextBox richTextBoxTimKiemSV;
+        private System.Windows.Forms.Label labelHuongDan;
+        private System.Windows.Forms.GroupBox groupBoxTimKiem;
+        private System.Windows.Forms.Label labelTieuChi;
+        private System.Windows.Forms.Label labelGiaTri;
     }
 }
