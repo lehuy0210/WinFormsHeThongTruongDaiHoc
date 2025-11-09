@@ -58,6 +58,7 @@ namespace He_Thong_Truong_Dai_Hoc
         // I. CONSTANTS - COLUMN NAMES
         // =========================================================
         // Định nghĩa tên cột như constants để tránh hardcode và dễ bảo trì
+        private const string COL_HINH_ANH = "colHinhAnh";
         private const string COL_MA_SV = "colMaSV";
         private const string COL_HO_SV = "colHoSV";
         private const string COL_TEN_LOT_SV = "colTenLotSV";
@@ -132,7 +133,16 @@ namespace He_Thong_Truong_Dai_Hoc
         // ===== THIẾT LẬP DATAGRIDVIEW =====
         private void ThietLapDataGridView()
         {
-            // Sử dụng constants thay vì hardcode
+            // BƯỚC 1: Thêm cột hình ảnh (DataGridViewImageColumn)
+            DataGridViewImageColumn colImage = new DataGridViewImageColumn();
+            colImage.Name = COL_HINH_ANH;
+            colImage.HeaderText = "Ảnh";
+            colImage.ImageLayout = DataGridViewImageCellLayout.Zoom; // Zoom để ảnh vừa khít
+            colImage.Width = 60; // Chiều rộng cố định
+            colImage.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dataGridViewThongTinSinhVien.Columns.Add(colImage);
+
+            // BƯỚC 2: Thêm các cột text (sử dụng constants)
             dataGridViewThongTinSinhVien.Columns.Add(COL_MA_SV, "Mã Sinh Viên");
             dataGridViewThongTinSinhVien.Columns.Add(COL_HO_SV, "Họ");
             dataGridViewThongTinSinhVien.Columns.Add(COL_TEN_LOT_SV, "Tên Lót");
@@ -145,14 +155,52 @@ namespace He_Thong_Truong_Dai_Hoc
             dataGridViewThongTinSinhVien.Columns.Add(COL_LOP_SV, "Lớp");
             dataGridViewThongTinSinhVien.Columns.Add(COL_TRANG_THAI_SV, "Trạng Thái");
 
-            // Tự động co dãn các cột
+            // BƯỚC 3: Tự động co dãn các cột (mặc định Fill)
             dataGridViewThongTinSinhVien.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            // Tối ưu riêng cho cột Ngày Sinh
-            dataGridViewThongTinSinhVien.Columns[COL_NGAY_SINH_SV].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewThongTinSinhVien.Columns[COL_NGAY_SINH_SV].DefaultCellStyle.Format = "d";
+            // BƯỚC 4: Tối ưu riêng cho từng cột
+            // Cột Mã SV: AllCells để vừa với nội dung
+            dataGridViewThongTinSinhVien.Columns[COL_MA_SV].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewThongTinSinhVien.Columns[COL_MA_SV].MinimumWidth = 100;
 
-            // Cấu hình thêm
+            // Cột Họ, Tên Lót, Tên: AllCells
+            dataGridViewThongTinSinhVien.Columns[COL_HO_SV].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewThongTinSinhVien.Columns[COL_HO_SV].MinimumWidth = 80;
+            dataGridViewThongTinSinhVien.Columns[COL_TEN_LOT_SV].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewThongTinSinhVien.Columns[COL_TEN_LOT_SV].MinimumWidth = 80;
+            dataGridViewThongTinSinhVien.Columns[COL_TEN_SV].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewThongTinSinhVien.Columns[COL_TEN_SV].MinimumWidth = 80;
+
+            // Cột Ngày Sinh: AllCells + Format ngắn
+            dataGridViewThongTinSinhVien.Columns[COL_NGAY_SINH_SV].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewThongTinSinhVien.Columns[COL_NGAY_SINH_SV].DefaultCellStyle.Format = "dd/MM/yyyy";
+            dataGridViewThongTinSinhVien.Columns[COL_NGAY_SINH_SV].MinimumWidth = 100;
+
+            // Cột Giới Tính: AllCells
+            dataGridViewThongTinSinhVien.Columns[COL_GIOI_TINH_SV].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewThongTinSinhVien.Columns[COL_GIOI_TINH_SV].MinimumWidth = 80;
+
+            // Cột CCCD: AllCells
+            dataGridViewThongTinSinhVien.Columns[COL_CCCD_SV].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewThongTinSinhVien.Columns[COL_CCCD_SV].MinimumWidth = 120;
+
+            // Cột Địa Chỉ: Fill (để chiếm hết không gian còn lại)
+            dataGridViewThongTinSinhVien.Columns[COL_DIA_CHI_SV].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewThongTinSinhVien.Columns[COL_DIA_CHI_SV].MinimumWidth = 150;
+
+            // Cột Email: Fill
+            dataGridViewThongTinSinhVien.Columns[COL_EMAIL_SV].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewThongTinSinhVien.Columns[COL_EMAIL_SV].MinimumWidth = 150;
+
+            // Cột Lớp: AllCells
+            dataGridViewThongTinSinhVien.Columns[COL_LOP_SV].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewThongTinSinhVien.Columns[COL_LOP_SV].MinimumWidth = 80;
+
+            // Cột Trạng Thái: AllCells
+            dataGridViewThongTinSinhVien.Columns[COL_TRANG_THAI_SV].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewThongTinSinhVien.Columns[COL_TRANG_THAI_SV].MinimumWidth = 100;
+
+            // BƯỚC 5: Cấu hình hành vi
             dataGridViewThongTinSinhVien.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewThongTinSinhVien.MultiSelect = false;
             dataGridViewThongTinSinhVien.ReadOnly = true;
@@ -633,6 +681,7 @@ namespace He_Thong_Truong_Dai_Hoc
          * Xóa tất cả dòng hiện tại
          * Duyệt qua danh sách (List) và thêm từng sinh viên
          * SỬ DỤNG CONSTANTS cho column order
+         * THÊM: Hỗ trợ hiển thị hình ảnh
          */
         private void HienThiDanhSach(List<ThongTinSinhVien> danhSach)
         {
@@ -647,9 +696,13 @@ namespace He_Thong_Truong_Dai_Hoc
                 // Duyệt qua danh sách và hiển thị từng sinh viên
                 foreach (ThongTinSinhVien sv in danhSach)
                 {
+                    // Load hình ảnh từ file path
+                    Image hinhAnh = LoadHinhAnh(sv.HinhAnhSV);
+
                     // Thêm dòng mới vào DataGridView
                     // Thứ tự cột phải khớp với thứ tự trong ThietLapDataGridView()
                     dataGridViewThongTinSinhVien.Rows.Add(
+                        hinhAnh,        // Cột hình ảnh (ĐẦU TIÊN)
                         sv.MaSV,
                         sv.HoSV,
                         sv.TenLotSV,
@@ -669,6 +722,81 @@ namespace He_Thong_Truong_Dai_Hoc
                 // Bật vẽ trở lại (luôn chạy dù có exception hay không)
                 dataGridViewThongTinSinhVien.ResumeLayout();
             }
+        }
+
+        // === PHƯƠNG THỨC LOAD HÌNH ẢNH ===
+        /*
+         * GIẢI THÍCH CHO SINH VIÊN:
+         *
+         * Chức năng: Load hình ảnh từ file path
+         * - Nếu có path và file tồn tại → Load ảnh
+         * - Nếu không có path hoặc file không tồn tại → Trả về ảnh mặc định
+         *
+         * Tại sao cần method này?
+         * - Tránh lỗi FileNotFoundException khi file không tồn tại
+         * - Hiển thị ảnh mặc định thay vì ô trống
+         * - Code gọn gàng, dễ bảo trì
+         */
+        private Image LoadHinhAnh(string duongDan)
+        {
+            // BƯỚC 1: Kiểm tra đường dẫn có rỗng không
+            if (string.IsNullOrWhiteSpace(duongDan))
+            {
+                return TaoAnhMacDinh();
+            }
+
+            // BƯỚC 2: Kiểm tra file có tồn tại không
+            if (!System.IO.File.Exists(duongDan))
+            {
+                return TaoAnhMacDinh();
+            }
+
+            // BƯỚC 3: Load ảnh từ file
+            try
+            {
+                // Tạo một copy của ảnh để tránh lock file
+                using (Image anhGoc = Image.FromFile(duongDan))
+                {
+                    return new Bitmap(anhGoc);
+                }
+            }
+            catch
+            {
+                // Nếu có lỗi khi load (file hỏng, format không hỗ trợ...)
+                return TaoAnhMacDinh();
+            }
+        }
+
+        // === PHƯƠNG THỨC TẠO ẢNH MẶC ĐỊNH ===
+        /*
+         * GIẢI THÍCH CHO SINH VIÊN:
+         *
+         * Chức năng: Tạo ảnh mặc định khi không có ảnh
+         * - Tạo một hình vuông màu xám nhạt
+         * - Vẽ text "No Image" ở giữa
+         *
+         * Sử dụng:
+         * - System.Drawing.Bitmap: Tạo ảnh mới
+         * - System.Drawing.Graphics: Vẽ lên ảnh
+         * - Không cần file, tạo trực tiếp trong code
+         */
+        private Image TaoAnhMacDinh()
+        {
+            // Tạo bitmap 60x60 (khớp với width của cột)
+            Bitmap bmp = new Bitmap(60, 60);
+
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                // Vẽ background màu xám nhạt
+                g.FillRectangle(Brushes.LightGray, 0, 0, 60, 60);
+
+                // Vẽ text "No Image" ở giữa (tùy chọn)
+                // Font nhỏ để vừa với 60x60
+                Font font = new Font("Segoe UI", 7);
+                g.DrawString("No\nImage", font, Brushes.Gray, new PointF(12, 20));
+            }
+
+            return bmp;
         }
 
         /*
