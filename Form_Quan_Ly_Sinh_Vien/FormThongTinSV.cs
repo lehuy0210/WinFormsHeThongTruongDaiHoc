@@ -23,6 +23,7 @@ namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Sinh_Vien
         // ===== THUỘC TÍNH =====
         public ThongTinSinhVien SinhVienMoi { get; private set; }
         private bool isEditMode = false; // Đánh dấu chế độ sửa hay thêm mới
+        private string duongDanAnhDaChon = ""; // Lưu đường dẫn ảnh đã chọn
 
         // ===== CONSTRUCTOR =====
         public FormThongTinSV(ThongTinSinhVien sv)
@@ -41,6 +42,9 @@ namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Sinh_Vien
 
             // THÊM event handler cho button OK
             buttonOKSV.Click += buttonOKSV_Click;
+
+            // THÊM event handler cho button Chọn Ảnh
+            buttonChonAnhSV.Click += buttonChonAnhSV_Click;
 
             // Cấu hình DateTimePicker
             dateTimePickerSV.Format = DateTimePickerFormat.Short;
@@ -118,6 +122,25 @@ namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Sinh_Vien
             textBoxEmail.Text = sv.EmailSV;
             comboBoxLopSV.Text = sv.LopSV;
             comboBoxTrangThaiSV.Text = sv.TrangThaiSV;
+
+            // Load hình ảnh nếu có
+            if (!string.IsNullOrWhiteSpace(sv.HinhAnhSV) && System.IO.File.Exists(sv.HinhAnhSV))
+            {
+                duongDanAnhDaChon = sv.HinhAnhSV;
+                try
+                {
+                    // Load ảnh vào PictureBox (tạo copy để tránh lock file)
+                    using (Image anhGoc = Image.FromFile(sv.HinhAnhSV))
+                    {
+                        pictureBoxAnhDaiDienSV.Image = new Bitmap(anhGoc);
+                    }
+                }
+                catch
+                {
+                    // Nếu có lỗi khi load ảnh, để trống
+                    pictureBoxAnhDaiDienSV.Image = null;
+                }
+            }
         }
 
         // ===== CÀI ĐẶT TAB ORDER =====
@@ -170,10 +193,74 @@ namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Sinh_Vien
             SinhVienMoi.EmailSV = textBoxEmail.Text.Trim();
             SinhVienMoi.LopSV = comboBoxLopSV.Text.Trim();
             SinhVienMoi.TrangThaiSV = comboBoxTrangThaiSV.Text.Trim();
+            SinhVienMoi.HinhAnhSV = duongDanAnhDaChon; // Lưu đường dẫn ảnh đã chọn
 
             // Đóng form với kết quả OK
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        // ===== XỬ LÝ BUTTON CHỌN ẢNH =====
+        /*
+         * GIẢI THÍCH CHO SINH VIÊN:
+         *
+         * Chức năng: Mở hộp thoại chọn file ảnh
+         * - Sử dụng OpenFileDialog để người dùng chọn file
+         * - Filter chỉ cho phép các file ảnh (jpg, png, gif, bmp)
+         * - Load ảnh vào PictureBox để preview
+         * - Lưu đường dẫn file vào biến duongDanAnhDaChon
+         *
+         * OpenFileDialog là gì?
+         * - Dialog chuẩn của Windows để chọn file
+         * - Có thể filter theo loại file
+         * - Trả về đường dẫn đầy đủ của file được chọn
+         */
+        private void buttonChonAnhSV_Click(object sender, EventArgs e)
+        {
+            // BƯỚC 1: Tạo OpenFileDialog
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                // BƯỚC 2: Cấu hình OpenFileDialog
+                openFileDialog.Title = "Chọn ảnh đại diện sinh viên";
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp|All Files|*.*";
+                openFileDialog.FilterIndex = 1; // Mặc định chọn filter đầu tiên
+                openFileDialog.RestoreDirectory = true;
+
+                // BƯỚC 3: Hiển thị dialog và kiểm tra kết quả
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        // BƯỚC 4: Lưu đường dẫn file đã chọn
+                        duongDanAnhDaChon = openFileDialog.FileName;
+
+                        // BƯỚC 5: Load ảnh vào PictureBox
+                        // Tạo copy của ảnh để tránh lock file
+                        using (Image anhGoc = Image.FromFile(duongDanAnhDaChon))
+                        {
+                            // Dispose ảnh cũ nếu có (tránh memory leak)
+                            if (pictureBoxAnhDaiDienSV.Image != null)
+                            {
+                                pictureBoxAnhDaiDienSV.Image.Dispose();
+                            }
+
+                            // Set ảnh mới
+                            pictureBoxAnhDaiDienSV.Image = new Bitmap(anhGoc);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Nếu có lỗi khi load ảnh (file hỏng, không phải ảnh...)
+                        MessageBox.Show(
+                            "Không thể tải ảnh!\n\nChi tiết lỗi: " + ex.Message,
+                            "Lỗi",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                        );
+                        duongDanAnhDaChon = ""; // Reset đường dẫn
+                    }
+                }
+            }
         }
 
         // ===== VALIDATION DỮ LIỆU =====

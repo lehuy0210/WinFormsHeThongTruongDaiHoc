@@ -73,6 +73,11 @@ Tại sao cần DTO?
     // ===== THUỘC TÍNH TRẠNG THÁI =====
         // Trạng thái: "Đang học", "Tốt nghiệp", "Nghỉ học", ...
       public string TrangThaiSV { get; set; } = "";
+
+        // ===== THUỘC TÍNH HÌNH ẢNH =====
+        // Đường dẫn đến file hình ảnh của sinh viên
+        // Lưu đường dẫn (path) thay vì byte[] để dễ xử lý
+        public string HinhAnhSV { get; set; } = "";
         
         /*
         ==================== TÓM TẮT CHO SINH VIÊN ====================
