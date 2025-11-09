@@ -108,12 +108,41 @@
             buttonLamMoiThongTinSV.Click += buttonLamMoiThongTinSV_Click;
             //
             // dataGridViewThongTinSinhVien
-            // 
-            dataGridViewThongTinSinhVien.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            //
+            dataGridViewThongTinSinhVien.AllowUserToAddRows = false;
+            dataGridViewThongTinSinhVien.AllowUserToDeleteRows = false;
+            dataGridViewThongTinSinhVien.AllowUserToResizeRows = false;
+            dataGridViewThongTinSinhVien.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240, 244, 248);
+            dataGridViewThongTinSinhVien.BackgroundColor = Color.White;
+            dataGridViewThongTinSinhVien.BorderStyle = BorderStyle.None;
+            dataGridViewThongTinSinhVien.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dataGridViewThongTinSinhVien.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dataGridViewThongTinSinhVien.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 120, 215);
+            dataGridViewThongTinSinhVien.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewThongTinSinhVien.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dataGridViewThongTinSinhVien.ColumnHeadersDefaultCellStyle.Padding = new Padding(10, 10, 10, 10);
+            dataGridViewThongTinSinhVien.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 120, 215);
+            dataGridViewThongTinSinhVien.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
+            dataGridViewThongTinSinhVien.ColumnHeadersHeight = 45;
+            dataGridViewThongTinSinhVien.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewThongTinSinhVien.DefaultCellStyle.BackColor = Color.White;
+            dataGridViewThongTinSinhVien.DefaultCellStyle.Font = new Font("Segoe UI", 9.75F);
+            dataGridViewThongTinSinhVien.DefaultCellStyle.ForeColor = Color.FromArgb(33, 37, 41);
+            dataGridViewThongTinSinhVien.DefaultCellStyle.Padding = new Padding(5, 5, 5, 5);
+            dataGridViewThongTinSinhVien.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 120, 215);
+            dataGridViewThongTinSinhVien.DefaultCellStyle.SelectionForeColor = Color.White;
+            dataGridViewThongTinSinhVien.EnableHeadersVisualStyles = false;
+            dataGridViewThongTinSinhVien.GridColor = Color.FromArgb(222, 226, 230);
             dataGridViewThongTinSinhVien.Location = new Point(0, 5);
+            dataGridViewThongTinSinhVien.MultiSelect = false;
             dataGridViewThongTinSinhVien.Name = "dataGridViewThongTinSinhVien";
+            dataGridViewThongTinSinhVien.ReadOnly = true;
+            dataGridViewThongTinSinhVien.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dataGridViewThongTinSinhVien.RowHeadersVisible = false;
             dataGridViewThongTinSinhVien.RowHeadersWidth = 51;
-            dataGridViewThongTinSinhVien.RowTemplate.Height = 24;
+            dataGridViewThongTinSinhVien.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dataGridViewThongTinSinhVien.RowTemplate.Height = 35;
+            dataGridViewThongTinSinhVien.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewThongTinSinhVien.Size = new Size(919, 634);
             dataGridViewThongTinSinhVien.TabIndex = 4;
             // 
