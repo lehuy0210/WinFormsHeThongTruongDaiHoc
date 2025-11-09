@@ -125,6 +125,7 @@ namespace He_Thong_Truong_Dai_Hoc
             buttonXoaThongTinSV.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonSuaThongTinSV.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonLamMoiThongTinSV.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonThongKeSV.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             dataGridViewThongTinSinhVien.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
         }
 
@@ -162,7 +163,7 @@ namespace He_Thong_Truong_Dai_Hoc
         /*
          * Enable/Disable buttons dựa trên trạng thái hiện tại
          * - Xóa/Sửa: Chỉ enable khi có sinh viên được chọn
-         * - Tìm kiếm: Chỉ enable khi có dữ liệu
+         * - Tìm kiếm/Làm mới/Thống kê: Chỉ enable khi có dữ liệu
          */
         private void CapNhatTrangThaiButtons()
         {
@@ -173,9 +174,10 @@ namespace He_Thong_Truong_Dai_Hoc
             buttonXoaThongTinSV.Enabled = coChon && coDuLieu;
             buttonSuaThongTinSV.Enabled = coChon && coDuLieu;
 
-            // Nút Tìm kiếm và Làm mới chỉ enable khi có dữ liệu
+            // Nút Tìm kiếm, Làm mới và Thống kê chỉ enable khi có dữ liệu
             buttonTimKiemSV.Enabled = coDuLieu;
             buttonLamMoiThongTinSV.Enabled = coDuLieu;
+            buttonThongKeSV.Enabled = coDuLieu;
 
             // Nút Thêm luôn enable
             buttonThemThongTinSV.Enabled = true;
@@ -521,6 +523,53 @@ namespace He_Thong_Truong_Dai_Hoc
                 // ERROR HANDLING: Bắt tất cả exceptions
                 MessageBox.Show(
                     $"Đã xảy ra lỗi khi làm mới danh sách!\n\nChi tiết lỗi:\n{ex.Message}",
+                    "Lỗi hệ thống",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
+        // === SỰ KIỆN THỐNG KÊ (NEW) ===
+        /*
+         * GIẢI THÍCH CHO SINH VIÊN:
+         *
+         * Chức năng: Hiển thị form thống kê sinh viên
+         * - Thống kê tổng quan (Tổng số, Nam, Nữ)
+         * - Thống kê theo lớp
+         * - Thống kê theo trạng thái (Đang học, Tốt nghiệp, ...)
+         *
+         * Sử dụng FormThongKeSV:
+         * - Truyền danh sách sinh viên từ DTO vào form
+         * - Form sử dụng ChucNangThongKeSV từ BLL để tính toán
+         */
+        private void buttonThongKeSV_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Kiểm tra có dữ liệu không
+                if (quanLy.LaySoLuongSinhVien() == 0)
+                {
+                    MessageBox.Show(
+                        "Chưa có dữ liệu sinh viên để thống kê!\nVui lòng thêm sinh viên trước.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                    return;
+                }
+
+                // Mở Form Thống Kê và truyền danh sách sinh viên
+                using (FormThongKeSV formThongKe = new FormThongKeSV(quanLy.LayDanhSachSinhVien()))
+                {
+                    formThongKe.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                // ERROR HANDLING: Bắt tất cả exceptions
+                MessageBox.Show(
+                    $"Đã xảy ra lỗi khi mở form thống kê!\n\nChi tiết lỗi:\n{ex.Message}",
                     "Lỗi hệ thống",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
