@@ -30,6 +30,7 @@
         {
             tabControlHeThong = new TabControl();
             tabPageQuanLySinhVien = new TabPage();
+            buttonThongKeSV = new Button();
             buttonLamMoiThongTinSV = new Button();
             dataGridViewThongTinSinhVien = new DataGridView();
             buttonXoaThongTinSV = new Button();
@@ -58,7 +59,8 @@
             tabControlHeThong.TabIndex = 0;
             // 
             // tabPageQuanLySinhVien
-            // 
+            //
+            tabPageQuanLySinhVien.Controls.Add(buttonThongKeSV);
             tabPageQuanLySinhVien.Controls.Add(buttonLamMoiThongTinSV);
             tabPageQuanLySinhVien.Controls.Add(dataGridViewThongTinSinhVien);
             tabPageQuanLySinhVien.Controls.Add(buttonXoaThongTinSV);
@@ -73,8 +75,23 @@
             tabPageQuanLySinhVien.Text = "Quản Lý Sinh Viên";
             tabPageQuanLySinhVien.UseVisualStyleBackColor = true;
             // 
+            // buttonThongKeSV
+            //
+            buttonThongKeSV.BackColor = Color.FromArgb(16, 185, 129);
+            buttonThongKeSV.Cursor = Cursors.Hand;
+            buttonThongKeSV.FlatStyle = FlatStyle.Flat;
+            buttonThongKeSV.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            buttonThongKeSV.ForeColor = Color.White;
+            buttonThongKeSV.Location = new Point(921, 435);
+            buttonThongKeSV.Name = "buttonThongKeSV";
+            buttonThongKeSV.Size = new Size(217, 80);
+            buttonThongKeSV.TabIndex = 6;
+            buttonThongKeSV.Text = "📊 THỐNG KÊ";
+            buttonThongKeSV.UseVisualStyleBackColor = false;
+            buttonThongKeSV.Click += buttonThongKeSV_Click;
+            //
             // buttonLamMoiThongTinSV
-            // 
+            //
             buttonLamMoiThongTinSV.Location = new Point(921, 349);
             buttonLamMoiThongTinSV.Name = "buttonLamMoiThongTinSV";
             buttonLamMoiThongTinSV.Size = new Size(217, 80);
@@ -82,7 +99,7 @@
             buttonLamMoiThongTinSV.Text = "LÀM MỚI THÔNG TIN ( SẮP XẾP)";
             buttonLamMoiThongTinSV.UseVisualStyleBackColor = true;
             buttonLamMoiThongTinSV.Click += buttonLamMoiThongTinSV_Click;
-            // 
+            //
             // dataGridViewThongTinSinhVien
             // 
             dataGridViewThongTinSinhVien.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -193,5 +210,6 @@
         private System.Windows.Forms.MenuStrip menuStripHeThongTruongDaiHoc;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private Button buttonLamMoiThongTinSV;
+        private Button buttonThongKeSV;
     }
 }
