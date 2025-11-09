@@ -79,6 +79,7 @@
             //
             buttonThongKeSV.BackColor = Color.FromArgb(16, 185, 129);
             buttonThongKeSV.Cursor = Cursors.Hand;
+            buttonThongKeSV.FlatAppearance.BorderSize = 0;
             buttonThongKeSV.FlatStyle = FlatStyle.Flat;
             buttonThongKeSV.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonThongKeSV.ForeColor = Color.White;
@@ -92,12 +93,18 @@
             //
             // buttonLamMoiThongTinSV
             //
+            buttonLamMoiThongTinSV.BackColor = Color.FromArgb(108, 117, 125);
+            buttonLamMoiThongTinSV.Cursor = Cursors.Hand;
+            buttonLamMoiThongTinSV.FlatAppearance.BorderSize = 0;
+            buttonLamMoiThongTinSV.FlatStyle = FlatStyle.Flat;
+            buttonLamMoiThongTinSV.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            buttonLamMoiThongTinSV.ForeColor = Color.White;
             buttonLamMoiThongTinSV.Location = new Point(921, 349);
             buttonLamMoiThongTinSV.Name = "buttonLamMoiThongTinSV";
             buttonLamMoiThongTinSV.Size = new Size(217, 80);
             buttonLamMoiThongTinSV.TabIndex = 5;
-            buttonLamMoiThongTinSV.Text = "LÀM MỚI THÔNG TIN ( SẮP XẾP)";
-            buttonLamMoiThongTinSV.UseVisualStyleBackColor = true;
+            buttonLamMoiThongTinSV.Text = "🔄 LÀM MỚI";
+            buttonLamMoiThongTinSV.UseVisualStyleBackColor = false;
             buttonLamMoiThongTinSV.Click += buttonLamMoiThongTinSV_Click;
             //
             // dataGridViewThongTinSinhVien
@@ -111,43 +118,67 @@
             dataGridViewThongTinSinhVien.TabIndex = 4;
             // 
             // buttonXoaThongTinSV
-            // 
+            //
+            buttonXoaThongTinSV.BackColor = Color.FromArgb(220, 53, 69);
+            buttonXoaThongTinSV.Cursor = Cursors.Hand;
+            buttonXoaThongTinSV.FlatAppearance.BorderSize = 0;
+            buttonXoaThongTinSV.FlatStyle = FlatStyle.Flat;
+            buttonXoaThongTinSV.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            buttonXoaThongTinSV.ForeColor = Color.White;
             buttonXoaThongTinSV.Location = new Point(921, 263);
             buttonXoaThongTinSV.Name = "buttonXoaThongTinSV";
             buttonXoaThongTinSV.Size = new Size(217, 80);
             buttonXoaThongTinSV.TabIndex = 3;
-            buttonXoaThongTinSV.Text = "XÓA THÔNG TIN";
-            buttonXoaThongTinSV.UseVisualStyleBackColor = true;
+            buttonXoaThongTinSV.Text = "🗑️ XÓA THÔNG TIN";
+            buttonXoaThongTinSV.UseVisualStyleBackColor = false;
             buttonXoaThongTinSV.Click += buttonXoaThongTinSV_Click;
             // 
             // buttonSuaThongTinSV
-            // 
+            //
+            buttonSuaThongTinSV.BackColor = Color.FromArgb(255, 152, 0);
+            buttonSuaThongTinSV.Cursor = Cursors.Hand;
+            buttonSuaThongTinSV.FlatAppearance.BorderSize = 0;
+            buttonSuaThongTinSV.FlatStyle = FlatStyle.Flat;
+            buttonSuaThongTinSV.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            buttonSuaThongTinSV.ForeColor = Color.White;
             buttonSuaThongTinSV.Location = new Point(921, 177);
             buttonSuaThongTinSV.Name = "buttonSuaThongTinSV";
             buttonSuaThongTinSV.Size = new Size(217, 80);
             buttonSuaThongTinSV.TabIndex = 2;
-            buttonSuaThongTinSV.Text = "SỬA THÔNG TIN";
-            buttonSuaThongTinSV.UseVisualStyleBackColor = true;
+            buttonSuaThongTinSV.Text = "✏️ SỬA THÔNG TIN";
+            buttonSuaThongTinSV.UseVisualStyleBackColor = false;
             buttonSuaThongTinSV.Click += buttonSuaThongTinSV_Click;
             // 
             // buttonTimKiemSV
-            // 
+            //
+            buttonTimKiemSV.BackColor = Color.FromArgb(102, 51, 153);
+            buttonTimKiemSV.Cursor = Cursors.Hand;
+            buttonTimKiemSV.FlatAppearance.BorderSize = 0;
+            buttonTimKiemSV.FlatStyle = FlatStyle.Flat;
+            buttonTimKiemSV.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            buttonTimKiemSV.ForeColor = Color.White;
             buttonTimKiemSV.Location = new Point(921, 91);
             buttonTimKiemSV.Name = "buttonTimKiemSV";
             buttonTimKiemSV.Size = new Size(217, 80);
             buttonTimKiemSV.TabIndex = 1;
-            buttonTimKiemSV.Text = "TÌM KIẾM";
-            buttonTimKiemSV.UseVisualStyleBackColor = true;
+            buttonTimKiemSV.Text = "🔍 TÌM KIẾM";
+            buttonTimKiemSV.UseVisualStyleBackColor = false;
             buttonTimKiemSV.Click += buttonTimKiemSV_Click;
             // 
             // buttonThemThongTinSV
-            // 
+            //
+            buttonThemThongTinSV.BackColor = Color.FromArgb(0, 120, 215);
+            buttonThemThongTinSV.Cursor = Cursors.Hand;
+            buttonThemThongTinSV.FlatAppearance.BorderSize = 0;
+            buttonThemThongTinSV.FlatStyle = FlatStyle.Flat;
+            buttonThemThongTinSV.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            buttonThemThongTinSV.ForeColor = Color.White;
             buttonThemThongTinSV.Location = new Point(921, 5);
             buttonThemThongTinSV.Name = "buttonThemThongTinSV";
             buttonThemThongTinSV.Size = new Size(217, 80);
             buttonThemThongTinSV.TabIndex = 0;
-            buttonThemThongTinSV.Text = "THÊM THÔNG TIN";
-            buttonThemThongTinSV.UseVisualStyleBackColor = true;
+            buttonThemThongTinSV.Text = "➕ THÊM THÔNG TIN";
+            buttonThemThongTinSV.UseVisualStyleBackColor = false;
             buttonThemThongTinSV.Click += buttonThemThongTinSV_Click;
             // 
             // tabPage2
