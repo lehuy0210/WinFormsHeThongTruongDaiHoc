@@ -120,6 +120,10 @@ namespace He_Thong_Truong_Dai_Hoc
         // ===== THIẾT LẬP GIAO DIỆN =====
         private void ThietLapGiaoDien()
         {
+            // PHÓNG TO FORM KHI CHẠY CHƯƠNG TRÌNH
+            this.WindowState = FormWindowState.Maximized;
+
+            // CÀI ĐẶT ANCHOR ĐỂ CÁC CONTROL TỰ ĐỘNG RESIZE
             tabControlHeThong.Dock = DockStyle.Fill;
             buttonThemThongTinSV.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonTimKiemSV.Anchor = AnchorStyles.Top | AnchorStyles.Right;
