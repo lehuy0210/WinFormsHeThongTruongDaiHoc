@@ -675,6 +675,185 @@ namespace He_Thong_Truong_Dai_Hoc
             }
         }
 
+        // === SỰ KIỆN XUẤT EXCEL SINH VIÊN ===
+        private void buttonXuatExcelSV_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MessageBox.Show(
+                    "Chức năng xuất Excel đang được phát triển!",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Đã xảy ra lỗi!\n\nChi tiết lỗi:\n{ex.Message}",
+                    "Lỗi hệ thống",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
+        // =========================================================
+        // VI. SỰ KIỆN TAB QUẢN LÝ GIẢNG VIÊN
+        // =========================================================
+
+        // === SỰ KIỆN THÊM GIẢNG VIÊN ===
+        private void buttonThemGV_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Chức năng đang được phát triển!",
+                "Thông báo",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+
+        // === SỰ KIỆN TÌM KIẾM GIẢNG VIÊN ===
+        private void buttonTimKiemGV_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Chức năng đang được phát triển!",
+                "Thông báo",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+
+        // === SỰ KIỆN SỬA GIẢNG VIÊN ===
+        private void buttonSuaGV_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Chức năng đang được phát triển!",
+                "Thông báo",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+
+        // === SỰ KIỆN XÓA GIẢNG VIÊN ===
+        private void buttonXoaGV_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Chức năng đang được phát triển!",
+                "Thông báo",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+
+        // === SỰ KIỆN LÀM MỚI GIẢNG VIÊN ===
+        private void buttonLamMoiGV_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Chức năng đang được phát triển!",
+                "Thông báo",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+
+        // === SỰ KIỆN THỐNG KÊ GIẢNG VIÊN ===
+        private void buttonThongKeGV_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Chức năng đang được phát triển!",
+                "Thông báo",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+
+        // =========================================================
+        // VII. SỰ KIỆN TAB QUẢN LÝ GIẢNG DẠY
+        // =========================================================
+
+        // === SỰ KIỆN QUẢN LÝ MÔN HỌC ===
+        private void buttonQuanLyMonHoc_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Chức năng đang được phát triển!",
+                "Thông báo",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+
+        // === SỰ KIỆN QUẢN LÝ LỚP HỌC ===
+        private void buttonQuanLyLopHoc_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Chức năng đang được phát triển!",
+                "Thông báo",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+
+        // === SỰ KIỆN QUẢN LÝ ĐIỂM ===
+        private void buttonQuanLyDiem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Chức năng đang được phát triển!",
+                "Thông báo",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+
+        // === SỰ KIỆN QUẢN LÝ LỊCH THI ===
+        private void buttonQuanLyLichThi_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Chức năng đang được phát triển!",
+                "Thông báo",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+
+        // === SỰ KIỆN QUẢN LÝ THỜI KHÓA BIỂU ===
+        private void buttonQuanLyThongKhoaBieu_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Chức năng đang được phát triển!",
+                "Thông báo",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+
+        // === SỰ KIỆN KẾT NỐI DATABASE ===
+        private void connectDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MessageBox.Show(
+                    "Chức năng kết nối database đang được phát triển!",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+
+                // TODO: Tại đây sẽ thêm logic kết nối database
+                // Khi kết nối thành công, cập nhật Form title:
+                // this.Text = "Hệ Thống Trường Học - Thông Tin Người Dùng: [username]";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Đã xảy ra lỗi!\n\nChi tiết lỗi:\n{ex.Message}",
+                    "Lỗi hệ thống",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
         // =========================================================
         // V. PHƯƠNG THỨC HỖ TRỢ (HELPER METHODS)
         // =========================================================
