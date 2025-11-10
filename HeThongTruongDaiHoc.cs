@@ -47,13 +47,160 @@ using System.Windows.Forms;
 
 namespace He_Thong_Truong_Dai_Hoc
 {
-    // ==================== MAIN FORM - HỆ THỐNG TRƯỜNG ĐẠI HỌC (OPTIMIZED) ====================
-    // REFACTORED: Áp dụng kiến trúc N-Layer (3-Tier Architecture)
-    // CẢI TIẾN:
-    // 1. Thêm constants cho column names
-    // 2. Thêm error handling
-    // 3. Implement button state management
-    // 4. Cải thiện UX
+    // ==================== MAIN FORM - HỆ THỐNG TRƯỜNG ĐẠI HỌC ====================
+    //
+    // 📚 KIẾN THỨC ÁP DỤNG:
+    //
+    // 1️⃣ SOFTWARE ARCHITECTURE:
+    //    - N-Layer Architecture (3-Tier Architecture)
+    //      • Presentation Layer (UI) - MainForm này
+    //      • Business Logic Layer (BLL) - Chuc năng xử lý
+    //      • Data Transfer Object (DTO) - QuanLySinhVien, ThongTinSinhVien
+    //
+    // 2️⃣ DATABASE PROGRAMMING:
+    //    - Chapter 3: N-Layer Architecture
+    //      • 3.3.1: Presentation Layer - Form, Controls, Events
+    //      • 3.3.2: Business Logic Layer - Validation, Algorithms
+    //      • 3.3.3: Data Transfer Object - DTO classes
+    //      • 3.4: Separation of Concerns - Tách biệt UI và Logic
+    //
+    // 3️⃣ GUI PROGRAMMING:
+    //    - Chapter 1: Windows Forms
+    //      • 1.2: Form - MainForm
+    //      • 1.3: TabControl - Quản lý nhiều tabs
+    //      • 1.4: DataGridView - Hiển thị danh sách
+    //    - Chapter 3: Event Handling
+    //      • Button Click Events - Thêm, Sửa, Xóa
+    //      • SelectionChanged Events - Cập nhật trạng thái buttons
+    //
+    // 4️⃣ OBJECT-ORIENTED PROGRAMMING:
+    //    - Chapter 2: Classes and Objects
+    //      • Composition - MainForm chứa BLL và DTO objects
+    //      • Dependency - MainForm phụ thuộc BLL, BLL phụ thuộc DTO
+    //
+    // 5️⃣ DESIGN PATTERNS:
+    //    - Separation of Concerns - Tách UI, Logic, Data
+    //    - Single Responsibility - Mỗi class có 1 nhiệm vụ
+    //    - Dependency Injection (thủ công) - Truyền List vào BLL
+    //
+    // 🎯 KIẾN TRÚC N-LAYER TRONG PROJECT NÀY:
+    //
+    // ┌─────────────────────────────────────────────────────────┐
+    // │  PRESENTATION LAYER (UI Layer)                          │
+    // │  - HeThongTruongDaiHoc.cs (MainForm)                   │
+    // │  - FormThongTinSinhVien.cs                             │
+    // │  - FormDatabase.cs                                      │
+    // │  • Hiển thị giao diện                                   │
+    // │  • Xử lý events (Click, SelectionChanged,...)          │
+    // │  • Gọi BLL để xử lý logic                              │
+    // ├─────────────────────────────────────────────────────────┤
+    // │  BUSINESS LOGIC LAYER (BLL Layer)                       │
+    // │  - ChucNangThemThongTinSV.cs                           │
+    // │  - ChucNangXoaThongTinSinhVien.cs                      │
+    // │  - ChucNangSuaThongTinSinhVien.cs                      │
+    // │  - ChucNangTimKiemThongTinSinhVien.cs                  │
+    // │  - ChucNangSapXepSV.cs                                 │
+    // │  - ChucNangThongKeSV.cs                                │
+    // │  • Validation - Kiểm tra dữ liệu                       │
+    // │  • Algorithms - Tìm kiếm, sắp xếp, thống kê           │
+    // │  • Business Rules - Quy tắc nghiệp vụ                  │
+    // ├─────────────────────────────────────────────────────────┤
+    // │  DATA TRANSFER OBJECT (DTO Layer)                       │
+    // │  - ThongTinSinhVien.cs                                 │
+    // │  - QuanLySinhVien.cs                                   │
+    // │  - ThongTinGiangVien.cs                                │
+    // │  - ThongTinMonHoc.cs, ThongTinDiem.cs,...             │
+    // │  • Chứa dữ liệu (Properties)                           │
+    // │  • KHÔNG chứa logic                                     │
+    // │  • Truyền dữ liệu giữa các layer                       │
+    // └─────────────────────────────────────────────────────────┘
+    //
+    // 💡 VÍ DỤ LUỒNG XỬ LÝ (THÊM SINH VIÊN):
+    //
+    // 1. USER CLICK BUTTON "THÊM":
+    //    → buttonThemThongTinSV_Click() được gọi (UI Layer)
+    //
+    // 2. UI LAYER TẠO DTO:
+    //    ThongTinSinhVien sv = new ThongTinSinhVien();
+    //    → Tạo object chứa dữ liệu
+    //
+    // 3. UI LAYER GỌI BLL:
+    //    bool ketQua = chucNangThem.ThemSinhVien(quanLy.LayDanhSachSinhVien(), sv);
+    //    → BLL xử lý validation, duplicate check, normalization
+    //
+    // 4. BLL XỬ LÝ:
+    //    - Kiểm tra dữ liệu hợp lệ
+    //    - Kiểm tra mã SV trùng
+    //    - Chuẩn hóa dữ liệu
+    //    - Thêm vào List
+    //    - Trả về true/false
+    //
+    // 5. UI LAYER HIỂN THỊ KẾT QUẢ:
+    //    if (ketQua) → Hiển thị "Thêm thành công"
+    //    else → Hiển thị "Thêm thất bại"
+    //
+    // 🔍 LỢI ÍCH CỦA N-LAYER ARCHITECTURE:
+    //
+    // 1. SEPARATION OF CONCERNS (Tách biệt mối quan tâm):
+    //    - UI chỉ lo hiển thị
+    //    - BLL chỉ lo logic
+    //    - DTO chỉ lo chứa dữ liệu
+    //
+    // 2. MAINTAINABILITY (Dễ bảo trì):
+    //    - Sửa logic → Chỉ sửa BLL
+    //    - Sửa giao diện → Chỉ sửa UI
+    //    - Không ảnh hưởng lẫn nhau
+    //
+    // 3. REUSABILITY (Tái sử dụng):
+    //    - BLL có thể dùng cho nhiều UI (WinForms, WPF, Web,...)
+    //    - VD: ChucNangThemSV dùng cho cả Desktop và Mobile
+    //
+    // 4. TESTABILITY (Dễ test):
+    //    - Test BLL riêng (không cần UI)
+    //    - Test UI riêng (không cần logic phức tạp)
+    //    - Unit testing dễ dàng hơn
+    //
+    // 5. TEAM COLLABORATION (Làm việc nhóm):
+    //    - Developer A: Làm UI
+    //    - Developer B: Làm BLL
+    //    - Developer C: Làm DTO/Database
+    //    - Không conflict code
+    //
+    /*
+    GIẢI THÍCH CHO SINH VIÊN:
+
+    N-Layer Architecture là gì?
+    - Chia ứng dụng thành nhiều tầng (Layer)
+    - Mỗi tầng có nhiệm vụ riêng
+    - Tầng trên gọi tầng dưới, KHÔNG ngược lại
+    - UI → BLL → DTO (một chiều)
+
+    Tại sao KHÔNG nên để logic trong UI?
+    - SAI: buttonThem_Click() { if (sv.Tuoi < 18) return; ... }
+    - ĐÚNG: buttonThem_Click() { chucNangThem.ThemSinhVien(...); }
+    - Lý do:
+      • Logic nằm trong UI → Không tái sử dụng được
+      • Khó test (phải mở form mới test được)
+      • Khó bảo trì (UI và logic lẫn lộn)
+
+    List là Reference Type:
+    - quanLy.LayDanhSachSinhVien() trả về REFERENCE (địa chỉ)
+    - BLL thao tác trực tiếp trên List gốc
+    - Không cần return List mới
+    - Thay đổi trong BLL → UI thấy ngay
+
+    Constants (Hằng số):
+    - private const string COL_MA_SV = "colMaSV";
+    - Tránh hardcode: "colMaSV", "colMaSV", "colMaSV"
+    - Dễ sửa: Chỉ sửa 1 chỗ
+    - Tránh lỗi typo: "colMasV", "colMASV"
+
+    Tab Control:
+    - tabPageQuanLySinhVien: Quản lý sinh viên
+    - tabPageQuanLyGiangVien: Quản lý giảng viên
+    - tabPageQuanLyGiangDay: Quản lý giảng dạy
+    - Mỗi tab có chức năng riêng
+    */
     public partial class HeThongTruongDaiHoc : Form
     {
         // =========================================================
