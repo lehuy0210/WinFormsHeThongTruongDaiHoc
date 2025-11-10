@@ -31,6 +31,8 @@
 
 using He_Thong_Truong_Dai_Hoc.Doi_Tuong_Trao_Doi_Du_Lieu__Data_Transfer_Object___DTO_;
 using He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Sinh_Vien;
+using He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Giang_Vien;
+using He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Giang_Day;
 using WinFormsHeThongTruongDaiHoc.Doi_Tuong_Trao_Doi_Du_Lieu__Data_Transfer_Object___DTO_;
 using WinFormsHeThongTruongDaiHoc.Lớp_Nghiệp_Vụ___Business_Logic_Layer; // THÊM MỚI: Import BLL
 using System;
@@ -775,56 +777,106 @@ namespace He_Thong_Truong_Dai_Hoc
         // === SỰ KIỆN QUẢN LÝ MÔN HỌC ===
         private void buttonQuanLyMonHoc_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                "Chức năng đang được phát triển!",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+            try
+            {
+                using (FormQuanLyMonHoc formMonHoc = new FormQuanLyMonHoc())
+                {
+                    formMonHoc.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Đã xảy ra lỗi khi mở form!\n\nChi tiết lỗi:\n{ex.Message}",
+                    "Lỗi hệ thống",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
 
         // === SỰ KIỆN QUẢN LÝ LỚP HỌC ===
         private void buttonQuanLyLopHoc_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                "Chức năng đang được phát triển!",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+            try
+            {
+                using (FormQuanLyLopHoc formLopHoc = new FormQuanLyLopHoc())
+                {
+                    formLopHoc.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Đã xảy ra lỗi khi mở form!\n\nChi tiết lỗi:\n{ex.Message}",
+                    "Lỗi hệ thống",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
 
         // === SỰ KIỆN QUẢN LÝ ĐIỂM ===
         private void buttonQuanLyDiem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                "Chức năng đang được phát triển!",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+            try
+            {
+                using (FormQuanLyDiem formDiem = new FormQuanLyDiem())
+                {
+                    formDiem.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Đã xảy ra lỗi khi mở form!\n\nChi tiết lỗi:\n{ex.Message}",
+                    "Lỗi hệ thống",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
 
         // === SỰ KIỆN QUẢN LÝ LỊCH THI ===
         private void buttonQuanLyLichThi_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                "Chức năng đang được phát triển!",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+            try
+            {
+                using (FormQuanLyLichThi formLichThi = new FormQuanLyLichThi())
+                {
+                    formLichThi.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Đã xảy ra lỗi khi mở form!\n\nChi tiết lỗi:\n{ex.Message}",
+                    "Lỗi hệ thống",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
 
         // === SỰ KIỆN QUẢN LÝ THỜI KHÓA BIỂU ===
         private void buttonQuanLyThongKhoaBieu_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                "Chức năng đang được phát triển!",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+            try
+            {
+                using (FormQuanLyThoiKhoaBieu formTKB = new FormQuanLyThoiKhoaBieu())
+                {
+                    formTKB.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Đã xảy ra lỗi khi mở form!\n\nChi tiết lỗi:\n{ex.Message}",
+                    "Lỗi hệ thống",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
 
         // === SỰ KIỆN KẾT NỐI DATABASE ===
@@ -832,21 +884,28 @@ namespace He_Thong_Truong_Dai_Hoc
         {
             try
             {
-                MessageBox.Show(
-                    "Chức năng kết nối database đang được phát triển!",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
-                );
+                using (FormDatabase formDB = new FormDatabase())
+                {
+                    DialogResult result = formDB.ShowDialog();
 
-                // TODO: Tại đây sẽ thêm logic kết nối database
-                // Khi kết nối thành công, cập nhật Form title:
-                // this.Text = "Hệ Thống Trường Học - Thông Tin Người Dùng: [username]";
+                    if (result == DialogResult.OK && formDB.IsConnected)
+                    {
+                        // Cập nhật Form title với username
+                        this.Text = $"Hệ Thống Trường Học - Thông Tin Người Dùng: {formDB.Username}";
+
+                        MessageBox.Show(
+                            "Kết nối database thành công!",
+                            "Thành công",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information
+                        );
+                    }
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"Đã xảy ra lỗi!\n\nChi tiết lỗi:\n{ex.Message}",
+                    $"Đã xảy ra lỗi khi kết nối database!\n\nChi tiết lỗi:\n{ex.Message}",
                     "Lỗi hệ thống",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
