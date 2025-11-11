@@ -1,6 +1,7 @@
 using He_Thong_Truong_Dai_Hoc.Doi_Tuong_Trao_Doi_Du_Lieu__Data_Transfer_Object___DTO_;
 using WinFormsHeThongTruongDaiHoc.Doi_Tuong_Trao_Doi_Du_Lieu__Data_Transfer_Object___DTO_;
 using WinFormsHeThongTruongDaiHoc.Lop_Nghiep_Vu___Business_Logic_Layer.Lop_Nghiep_Vu_QuanLyHoSo;
+using WinFormsHeThongTruongDaiHoc.Lop_Nghiep_Vu___Business_Logic_Layer.Export;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -25,6 +26,7 @@ namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Ho_So
         // Controls
         private DataGridView dataGridView;
         private Button btnThem, btnXoa, btnSua, btnTimKiem, btnLamMoi, btnThongKe;
+        private Button btnXuatExcel;
         private TextBox txtTimKiem;
         private ComboBox cboLoaiHoSo, cboTrangThai;
         private Label lblTongSo;
@@ -71,6 +73,7 @@ namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Ho_So
             btnSua = new Button { Text = "Sửa Hồ Sơ", Location = new Point(280, 20), Size = new Size(120, 35) };
             btnLamMoi = new Button { Text = "Làm Mới", Location = new Point(410, 20), Size = new Size(120, 35) };
             btnThongKe = new Button { Text = "Thống Kê", Location = new Point(540, 20), Size = new Size(120, 35) };
+            btnXuatExcel = new Button { Text = "Xuất Excel", Location = new Point(670, 20), Size = new Size(120, 35), BackColor = Color.FromArgb(33, 150, 83), ForeColor = Color.White };
 
             // Search controls
             txtTimKiem = new TextBox { Location = new Point(20, 65), Size = new Size(200, 25) };
@@ -93,10 +96,11 @@ namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Ho_So
             btnTimKiem.Click += BtnTimKiem_Click;
             btnLamMoi.Click += BtnLamMoi_Click;
             btnThongKe.Click += BtnThongKe_Click;
+            btnXuatExcel.Click += BtnXuatExcel_Click;
 
             // Add controls
-            this.Controls.AddRange(new Control[] { 
-                dataGridView, btnThem, btnXoa, btnSua, btnLamMoi, btnThongKe,
+            this.Controls.AddRange(new Control[] {
+                dataGridView, btnThem, btnXoa, btnSua, btnLamMoi, btnThongKe, btnXuatExcel,
                 txtTimKiem, btnTimKiem, cboLoaiHoSo, cboTrangThai, lblTongSo
             });
         }
@@ -265,7 +269,7 @@ namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Ho_So
                 message += "Theo Loại:\n";
                 foreach (var item in thongKeLoai)
                     message += $"  - {item.Key}: {item.Value} hồ sơ\n";
-                
+
                 message += "\nTheo Trạng Thái:\n";
                 foreach (var item in thongKeTrangThai)
                     message += $"  - {item.Key}: {item.Value} hồ sơ\n";
@@ -275,6 +279,45 @@ namespace He_Thong_Truong_Dai_Hoc.Form_Quan_Ly_Ho_So
             catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // ==================== EXPORT FUNCTIONALITY ====================
+
+        private void BtnXuatExcel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveDialog = new SaveFileDialog
+                {
+                    Filter = "CSV files (*.csv)|*.csv",
+                    Title = "Xuất dữ liệu sang CSV (Excel)",
+                    FileName = $"HoSo_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
+                };
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    ChucNangXuatCSV xuatCSV = new ChucNangXuatCSV();
+                    bool ketQua = xuatCSV.XuatDanhSachHoSo(
+                        quanLy.LayDanhSachHoSo(),
+                        saveDialog.FileName);
+
+                    if (ketQua)
+                    {
+                        MessageBox.Show($"Xuất file CSV thành công!\n\nĐường dẫn: {saveDialog.FileName}\n\nFile có thể mở bằng Microsoft Excel.",
+                            "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{saveDialog.FileName}\"");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Xuất file thất bại! Không có dữ liệu để xuất.",
+                            "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi xuất CSV: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

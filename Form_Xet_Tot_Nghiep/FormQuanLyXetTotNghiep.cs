@@ -1,5 +1,6 @@
 using He_Thong_Truong_Dai_Hoc.Doi_Tuong_Trao_Doi_Du_Lieu__Data_Transfer_Object___DTO_;
 using WinFormsHeThongTruongDaiHoc.Lop_Nghiep_Vu___Business_Logic_Layer.Lop_Nghiep_Vu_XetTotNghiep;
+using WinFormsHeThongTruongDaiHoc.Lop_Nghiep_Vu___Business_Logic_Layer.Export;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -25,6 +26,7 @@ namespace WinFormsHeThongTruongDaiHoc.Form_Xet_Tot_Nghiep
 
         private DataGridView dataGridView;
         private Button btnThem, btnXoa, btnSua, btnTimKiem, btnLamMoi, btnThongKe;
+        private Button btnXuatExcel, btnXuatWord, btnXuatBieuDo;
         private TextBox txtTimKiem;
         private ComboBox cboKhoa, cboKetQua, cboXepLoai;
         private Label lblTimKiem, lblKhoa, lblKetQua, lblXepLoai;
@@ -383,6 +385,144 @@ namespace WinFormsHeThongTruongDaiHoc.Form_Xet_Tot_Nghiep
                 TrangThaiKhoaLuan = "Đã hoàn thành",
                 HocKyTotNghiep = "HK2 2023-2024"
             });
+        }
+
+        // ==================== XUẤT BÁO CÁO ====================
+
+        private void BtnXuatExcel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveDialog = new SaveFileDialog
+                {
+                    Filter = "CSV files (*.csv)|*.csv",
+                    Title = "Xuất dữ liệu sang CSV (Excel)",
+                    FileName = $"XetTotNghiep_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
+                };
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    ChucNangXuatCSV xuatCSV = new ChucNangXuatCSV();
+                    bool ketQua = xuatCSV.XuatDanhSachXetTotNghiep(
+                        quanLy.LayDanhSachXetTotNghiep(),
+                        saveDialog.FileName);
+
+                    if (ketQua)
+                    {
+                        MessageBox.Show($"Xuất file thành công!\n\nĐường dẫn: {saveDialog.FileName}",
+                            "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Mở file sau khi xuất
+                        System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{saveDialog.FileName}\"");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Xuất file thất bại!", "Lỗi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi xuất: {ex.Message}", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnXuatWord_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveDialog = new SaveFileDialog
+                {
+                    Filter = "RTF files (*.rtf)|*.rtf",
+                    Title = "Xuất báo cáo sang Word (RTF)",
+                    FileName = $"BaoCaoXetTotNghiep_{DateTime.Now:yyyyMMdd_HHmmss}.rtf"
+                };
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    ChucNangXuatRTF xuatRTF = new ChucNangXuatRTF();
+                    bool ketQua = xuatRTF.XuatBaoCaoXetTotNghiep(
+                        quanLy.LayDanhSachXetTotNghiep(),
+                        saveDialog.FileName);
+
+                    if (ketQua)
+                    {
+                        MessageBox.Show($"Xuất báo cáo thành công!\n\nĐường dẫn: {saveDialog.FileName}\n\nCó thể mở bằng Microsoft Word.",
+                            "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{saveDialog.FileName}\"");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Xuất báo cáo thất bại!", "Lỗi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi xuất: {ex.Message}", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnXuatBieuDo_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveDialog = new SaveFileDialog
+                {
+                    Filter = "HTML files (*.html)|*.html",
+                    Title = "Xuất biểu đồ thống kê",
+                    FileName = $"BieuDoXetTotNghiep_{DateTime.Now:yyyyMMdd_HHmmss}.html"
+                };
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    List<ThongTinXetTotNghiep> danhSach = quanLy.LayDanhSachXetTotNghiep();
+
+                    // Thống kê theo xếp loại
+                    Dictionary<string, int> thongKe = chucNangThongKe.ThongKeTheoXepLoai(danhSach);
+
+                    // Chuyển sang Dictionary<string, double> để vẽ biểu đồ
+                    Dictionary<string, double> data = new Dictionary<string, double>();
+                    foreach (var item in thongKe)
+                    {
+                        data[item.Key] = item.Value;
+                    }
+
+                    ChucNangXuatBieuDo xuatBieuDo = new ChucNangXuatBieuDo();
+                    bool ketQua = xuatBieuDo.TaoBieuDoCot(
+                        data,
+                        saveDialog.FileName,
+                        "THỐNG KÊ XÉT TỐT NGHIỆP THEO XẾP LOẠI");
+
+                    if (ketQua)
+                    {
+                        MessageBox.Show($"Tạo biểu đồ thành công!\n\nĐường dẫn: {saveDialog.FileName}\n\nMở file HTML bằng trình duyệt để xem.",
+                            "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Mở file HTML trong trình duyệt
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                        {
+                            FileName = saveDialog.FileName,
+                            UseShellExecute = true
+                        });
+                    }
+                    else
+                    {
+                        MessageBox.Show("Tạo biểu đồ thất bại!", "Lỗi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tạo biểu đồ: {ex.Message}", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

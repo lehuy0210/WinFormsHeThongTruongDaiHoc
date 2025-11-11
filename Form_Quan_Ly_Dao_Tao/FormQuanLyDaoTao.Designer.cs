@@ -245,6 +245,19 @@ namespace WinFormsHeThongTruongDaiHoc.Form_Quan_Ly_Dao_Tao
             };
             btnThongKe.Click += BtnThongKe_Click;
 
+            // Button Xuất Excel
+            btnXuatExcel = new Button
+            {
+                Text = "Xuất Excel",
+                Location = new Point(750, 580),
+                Size = new Size(110, 40),
+                BackColor = Color.FromArgb(33, 150, 83),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnXuatExcel.Click += BtnXuatExcel_Click;
+
             // ==================== ADD CONTROLS TO FORM ====================
             // 📚 KIẾN THỨC: Controls.Add() - Thêm controls vào Form
             // 🔍 LƯU Ý: Phải Add controls vào Form thì mới hiển thị được
@@ -263,6 +276,7 @@ namespace WinFormsHeThongTruongDaiHoc.Form_Quan_Ly_Dao_Tao
             this.Controls.Add(btnTimKiem);
             this.Controls.Add(btnLamMoi);
             this.Controls.Add(btnThongKe);
+            this.Controls.Add(btnXuatExcel);
 
             // ==================== GIẢI THÍCH DESIGNER PATTERN ====================
             //

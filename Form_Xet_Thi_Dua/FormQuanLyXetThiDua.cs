@@ -1,5 +1,6 @@
 using He_Thong_Truong_Dai_Hoc.Doi_Tuong_Trao_Doi_Du_Lieu__Data_Transfer_Object___DTO_;
 using WinFormsHeThongTruongDaiHoc.Lop_Nghiep_Vu___Business_Logic_Layer.Lop_Nghiep_Vu_XetThiDua;
+using WinFormsHeThongTruongDaiHoc.Lop_Nghiep_Vu___Business_Logic_Layer.Export;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -25,6 +26,7 @@ namespace WinFormsHeThongTruongDaiHoc.Form_Xet_Thi_Dua
 
         private DataGridView dataGridView;
         private Button btnThem, btnXoa, btnSua, btnTimKiem, btnLamMoi, btnThongKe;
+        private Button btnXuatExcel, btnXuatWord, btnXuatBieuDo;
         private TextBox txtTimKiem;
         private ComboBox cboLoaiDoiTuong, cboKhoa, cboXepLoai;
         private Label lblTimKiem, lblLoaiDoiTuong, lblKhoa, lblXepLoai;
@@ -308,6 +310,151 @@ namespace WinFormsHeThongTruongDaiHoc.Form_Xet_Thi_Dua
             catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // ==================== EXPORT FUNCTIONALITY ====================
+
+        private void BtnXuatExcel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveDialog = new SaveFileDialog
+                {
+                    Filter = "CSV files (*.csv)|*.csv",
+                    Title = "Xuất dữ liệu sang CSV (Excel)",
+                    FileName = $"XetThiDua_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
+                };
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    ChucNangXuatCSV xuatCSV = new ChucNangXuatCSV();
+                    bool ketQua = xuatCSV.XuatDanhSachXetThiDua(
+                        quanLy.LayDanhSachXetThiDua(),
+                        saveDialog.FileName);
+
+                    if (ketQua)
+                    {
+                        MessageBox.Show($"Xuất file CSV thành công!\n\nĐường dẫn: {saveDialog.FileName}\n\nFile có thể mở bằng Microsoft Excel.",
+                            "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{saveDialog.FileName}\"");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Xuất file thất bại! Không có dữ liệu để xuất.",
+                            "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi xuất CSV: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnXuatWord_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveDialog = new SaveFileDialog
+                {
+                    Filter = "Rich Text Format (*.rtf)|*.rtf",
+                    Title = "Xuất báo cáo sang Word",
+                    FileName = $"BaoCaoXetThiDua_{DateTime.Now:yyyyMMdd_HHmmss}.rtf"
+                };
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    List<ThongTinXetThiDua> danhSach = quanLy.LayDanhSachXetThiDua();
+                    Dictionary<string, int> thongKeXepLoai = chucNangThongKe.ThongKeTheoXepLoai(danhSach);
+                    Dictionary<string, int> thongKeLoai = chucNangThongKe.ThongKeTheoLoaiDoiTuong(danhSach);
+                    double diemTB = chucNangThongKe.TinhTrungBinhDiemChung(danhSach);
+
+                    ChucNangXuatRTF xuatRTF = new ChucNangXuatRTF();
+                    bool ketQua = xuatRTF.XuatBaoCaoXetThiDua(
+                        danhSach,
+                        thongKeXepLoai,
+                        thongKeLoai,
+                        diemTB,
+                        saveDialog.FileName);
+
+                    if (ketQua)
+                    {
+                        MessageBox.Show($"Xuất file RTF thành công!\n\nĐường dẫn: {saveDialog.FileName}\n\nFile có thể mở bằng Microsoft Word.",
+                            "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{saveDialog.FileName}\"");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Xuất file thất bại! Không có dữ liệu để xuất.",
+                            "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi xuất RTF: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnXuatBieuDo_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<ThongTinXetThiDua> danhSach = quanLy.LayDanhSachXetThiDua();
+
+                if (danhSach.Count == 0)
+                {
+                    MessageBox.Show("Không có dữ liệu để xuất biểu đồ!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                SaveFileDialog saveDialog = new SaveFileDialog
+                {
+                    Filter = "HTML files (*.html)|*.html",
+                    Title = "Xuất biểu đồ thống kê",
+                    FileName = $"BieuDoXetThiDua_{DateTime.Now:yyyyMMdd_HHmmss}.html"
+                };
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    Dictionary<string, int> thongKe = chucNangThongKe.ThongKeTheoXepLoai(danhSach);
+
+                    // Convert Dictionary<string, int> to Dictionary<string, double>
+                    Dictionary<string, double> data = new Dictionary<string, double>();
+                    foreach (var item in thongKe)
+                    {
+                        data[item.Key] = item.Value;
+                    }
+
+                    ChucNangXuatBieuDo xuatBieuDo = new ChucNangXuatBieuDo();
+                    bool ketQua = xuatBieuDo.TaoBieuDoCot(
+                        data,
+                        saveDialog.FileName,
+                        "THỐNG KÊ XÉT THI ĐUA THEO XẾP LOẠI");
+
+                    if (ketQua)
+                    {
+                        MessageBox.Show($"Xuất biểu đồ thành công!\n\nĐường dẫn: {saveDialog.FileName}\n\nFile HTML sẽ được mở trong trình duyệt.",
+                            "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                        {
+                            FileName = saveDialog.FileName,
+                            UseShellExecute = true
+                        });
+                    }
+                    else
+                    {
+                        MessageBox.Show("Xuất biểu đồ thất bại!",
+                            "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi xuất biểu đồ: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

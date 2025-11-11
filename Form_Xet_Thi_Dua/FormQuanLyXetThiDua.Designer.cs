@@ -204,6 +204,43 @@ namespace WinFormsHeThongTruongDaiHoc.Form_Xet_Thi_Dua
             };
             btnThongKe.Click += BtnThongKe_Click;
 
+            // Export buttons
+            btnXuatExcel = new Button
+            {
+                Text = "Xuất Excel",
+                Location = new Point(750, 640),
+                Size = new Size(110, 40),
+                BackColor = Color.FromArgb(33, 150, 83),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnXuatExcel.Click += BtnXuatExcel_Click;
+
+            btnXuatWord = new Button
+            {
+                Text = "Xuất Word",
+                Location = new Point(880, 640),
+                Size = new Size(110, 40),
+                BackColor = Color.FromArgb(41, 98, 255),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnXuatWord.Click += BtnXuatWord_Click;
+
+            btnXuatBieuDo = new Button
+            {
+                Text = "Xuất Biểu đồ",
+                Location = new Point(1010, 640),
+                Size = new Size(110, 40),
+                BackColor = Color.FromArgb(230, 126, 34),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnXuatBieuDo.Click += BtnXuatBieuDo_Click;
+
             // Add controls to form
             this.Controls.Add(dataGridView);
             this.Controls.Add(lblTimKiem);
@@ -220,6 +257,9 @@ namespace WinFormsHeThongTruongDaiHoc.Form_Xet_Thi_Dua
             this.Controls.Add(btnTimKiem);
             this.Controls.Add(btnLamMoi);
             this.Controls.Add(btnThongKe);
+            this.Controls.Add(btnXuatExcel);
+            this.Controls.Add(btnXuatWord);
+            this.Controls.Add(btnXuatBieuDo);
         }
 
         #endregion

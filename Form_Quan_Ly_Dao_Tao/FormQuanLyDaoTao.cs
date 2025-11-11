@@ -1,5 +1,6 @@
 using He_Thong_Truong_Dai_Hoc.Doi_Tuong_Trao_Doi_Du_Lieu__Data_Transfer_Object___DTO_;
 using WinFormsHeThongTruongDaiHoc.Lop_Nghiep_Vu___Business_Logic_Layer.Lop_Nghiep_Vu_QuanLyDaoTao;
+using WinFormsHeThongTruongDaiHoc.Lop_Nghiep_Vu___Business_Logic_Layer.Export;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -44,6 +45,7 @@ namespace WinFormsHeThongTruongDaiHoc.Form_Quan_Ly_Dao_Tao
         // UI Controls
         private DataGridView dataGridView;
         private Button btnThem, btnXoa, btnSua, btnTimKiem, btnLamMoi, btnThongKe;
+        private Button btnXuatExcel;
         private TextBox txtTimKiem;
         private ComboBox cboKhoa, cboBacDaoTao, cboTrangThai;
         private Label lblTimKiem, lblKhoa, lblBacDaoTao, lblTrangThai;
@@ -376,6 +378,45 @@ namespace WinFormsHeThongTruongDaiHoc.Form_Quan_Ly_Dao_Tao
             {
                 MessageBox.Show($"Lỗi khi thống kê: {ex.Message}", "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // ==================== EXPORT FUNCTIONALITY ====================
+
+        private void BtnXuatExcel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveDialog = new SaveFileDialog
+                {
+                    Filter = "CSV files (*.csv)|*.csv",
+                    Title = "Xuất dữ liệu sang CSV (Excel)",
+                    FileName = $"DaoTao_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
+                };
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    ChucNangXuatCSV xuatCSV = new ChucNangXuatCSV();
+                    bool ketQua = xuatCSV.XuatDanhSachDaoTao(
+                        quanLy.LayDanhSachChuongTrinh(),
+                        saveDialog.FileName);
+
+                    if (ketQua)
+                    {
+                        MessageBox.Show($"Xuất file CSV thành công!\n\nĐường dẫn: {saveDialog.FileName}\n\nFile có thể mở bằng Microsoft Excel.",
+                            "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{saveDialog.FileName}\"");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Xuất file thất bại! Không có dữ liệu để xuất.",
+                            "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi xuất CSV: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
